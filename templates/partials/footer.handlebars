@@ -1,0 +1,8 @@
+<h1>Thanks for visiting!</h1>
+<ul class='footerItems'>
+  {{#each menuItems}}
+    <li class='footerItem {{#if this.active}}active{{else}}inactive{{/if}}'>
+      <a href='{{this.link}}'>{{this.name}}</a>
+    </li>
+  {{/each}}
+</ul>

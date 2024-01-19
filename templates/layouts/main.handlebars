@@ -13,7 +13,7 @@
       <nav>
         <ul class="menuItems">
           {{#each menuItems}}
-            <li class="menuItem">
+            <li class="menuItem {{#if this.active}}active{{else}}inactive{{/if}}">
               <a href="{{this.link}}">{{this.name}}</a>
             </li>
           {{/each}}
@@ -23,6 +23,9 @@
     <div class="main">
       {{{body}}}
     </div>
+    <footer class="footer">
+      {{> footer}}
+    </footer>
   </body>
 
 </html>
