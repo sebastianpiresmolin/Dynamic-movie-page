@@ -1,8 +1,9 @@
 import express from 'express';
 import { engine } from 'express-handlebars';
-import fs from 'fs/promises';
-import handlebars from 'handlebars';
-import path from 'path';
+import fetch from 'node-fetch';
+
+const url = 'https://plankton-app-xhkom.ondigitalocean.app/api/movies';
+const settings = { method: 'Get' };
 
 const app = express();
 
@@ -30,14 +31,16 @@ const images = [
   },
 ];
 
-async function renderPage(response, page) {
+
+
+/*async function renderPage(response, page) {
   const activePage = page === '/' ? index : page;
-  const currentPath = page == 'index' ? '/' : `/${page}`
+  const currentPath = page == 'index' ? '/' : `/${page}`;
   const activeImage =
     page === '/' ? 0 : page === 'about' ? 1 : page === 'contact' ? 2 : 0;
   const activeImageIndex = images[activeImage][activePage];
   response.render(page, {
-    menuItems: MENU.map(item => {
+    menuItems: MENU.map((item) => {
       return {
         active: currentPath == item.link,
         name: item.name,
@@ -46,7 +49,7 @@ async function renderPage(response, page) {
     }),
     image: activeImageIndex,
   });
-}
+}*/
 
 app.get('/', async (request, response) => {
   renderPage(response, 'index');
@@ -60,6 +63,8 @@ app.get('/contact', async (request, response) => {
   renderPage(response, 'contact');
 });
 
+app.get('');
+
 app.use(express.static('static'));
 
-app.listen(3080);
+app.listen(5080);
