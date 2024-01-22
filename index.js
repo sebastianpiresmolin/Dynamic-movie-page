@@ -33,8 +33,10 @@ const images = [
 ];
 
 async function renderPage(response, page) {
+  //Check to se if current page is index and also check which page is active so that I know which image to serve.
   const currentPath = page == 'index' ? '/' : `/${page}`;
   page === '/' ? 0 : page === 'about' ? 1 : page === 'contact' ? 2 : 0;
+
   if (page === 'movies') {
     fetch(url, settings)
       .then((response) => response.json())
