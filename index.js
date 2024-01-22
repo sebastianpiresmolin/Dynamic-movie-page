@@ -34,20 +34,42 @@ const images = [
 
 async function renderPage(response, page) {
   const currentPath = page == 'index' ? '/' : `/${page}`;
-    page === '/' ? 0 : page === 'about' ? 1 : page === 'contact' ? 2 : 0;
+  page === '/' ? 0 : page === 'about' ? 1 : page === 'contact' ? 2 : 0;
   if (page === 'movies') {
     fetch(url, settings)
       .then((response) => response.json())
       .then((json) => {
         response.render(page, {
-          movieIDs: json.data.map((movie) => {
+          movieIDs: json.data.map((movies) => {
             return {
-              id: movie.id,
-              title: movie.attributes.title,
-              intro: movie.attributes.intro,
-              image: movie.attributes.image.url,
+              id: movies.id,
+              title: movies.attributes.title,
+              intro: movies.attributes.intro,
+              image: movies.attributes.image.url,
             };
           }),
+          menuItems: MENU.map((item) => {
+            return {
+              active: currentPath == item.link,
+              name: item.name,
+              link: item.link,
+            };
+          }),
+        });
+      });
+  } else if (page.startsWith('/movie/')) {
+    const id = page.split('/')[2]; // Get the id from the URL
+    fetch(`${url}/${id}`, settings) // Fetch the data for the specific movie
+      .then((response) => response.json())
+      .then((json) => {
+        response.render('movie', {
+          // Render the 'movie' view
+          movie: {
+            id: json.data.id,
+            title: json.data.attributes.title,
+            intro: json.data.attributes.intro,
+            image: json.data.attributes.image.url,
+          },
           menuItems: MENU.map((item) => {
             return {
               active: currentPath == item.link,
@@ -90,6 +112,11 @@ app.get('/contact', async (request, response) => {
 
 app.get('/movies', async (request, response) => {
   renderPage(response, 'movies');
+});
+
+app.get('/movie/:id', async function (request, response) {
+  const id = request.params.id;
+  renderPage(response, `/movie/${id}`);
 });
 
 app.get('');
