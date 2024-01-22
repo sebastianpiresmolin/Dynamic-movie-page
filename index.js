@@ -31,25 +31,42 @@ const images = [
   },
 ];
 
-
-
-/*async function renderPage(response, page) {
-  const activePage = page === '/' ? index : page;
-  const currentPath = page == 'index' ? '/' : `/${page}`;
-  const activeImage =
-    page === '/' ? 0 : page === 'about' ? 1 : page === 'contact' ? 2 : 0;
-  const activeImageIndex = images[activeImage][activePage];
-  response.render(page, {
-    menuItems: MENU.map((item) => {
-      return {
-        active: currentPath == item.link,
-        name: item.name,
-        link: item.link,
-      };
-    }),
-    image: activeImageIndex,
-  });
-}*/
+async function renderPage(response, page) {
+  if (page === 'movies') {
+    fetch(url, settings)
+      .then((response) => response.json())
+      .then((json) => {
+        const mappedMovies = json.data.map((movie) => {
+          return {
+            title: movie.title,
+            intro: movie.intro,
+            image: movie.image,
+          };
+        });
+        response.render(page, {
+          allMovies: mappedMovies,
+        });
+      });
+  } else {
+    async function renderPage(response, page) {
+      const activePage = page === '/' ? index : page;
+      const currentPath = page == 'index' ? '/' : `/${page}`;
+      const activeImage =
+        page === '/' ? 0 : page === 'about' ? 1 : page === 'contact' ? 2 : 0;
+      const activeImageIndex = images[activeImage][activePage];
+      response.render(page, {
+        menuItems: MENU.map((item) => {
+          return {
+            active: currentPath == item.link,
+            name: item.name,
+            link: item.link,
+          };
+        }),
+        image: activeImageIndex,
+      });
+    }
+  }
+}
 
 app.get('/', async (request, response) => {
   renderPage(response, 'index');
@@ -61,6 +78,10 @@ app.get('/about', async (request, response) => {
 
 app.get('/contact', async (request, response) => {
   renderPage(response, 'contact');
+});
+
+app.get('/movies', async (request, response) => {
+  renderPage(response, 'movies');
 });
 
 app.get('');
