@@ -1,1 +1,10 @@
-{{allMovies}}
+<ul class='allMovies'>
+  {{#each movieIDs}}
+    <li class='movies'>
+      <a href='/movies/{{this.id}}'>
+        <img src='{{this.image}}' alt='{{this.title}}' />
+        <h2>{{this.title}}</h2>
+      </a>
+    </li>
+  {{/each}}
+</ul>

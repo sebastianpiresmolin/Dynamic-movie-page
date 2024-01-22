@@ -45,7 +45,7 @@ footer {
   width: 100vw;
   background-color: gray;
   bottom: 0;
-  position: absolute;
+  position: relative;
 }
 footer h1 {
   margin: 0px;

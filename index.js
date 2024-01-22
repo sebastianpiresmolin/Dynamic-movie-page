@@ -15,6 +15,7 @@ const MENU = [
   { name: 'Home', link: '/' },
   { name: 'About', link: '/about' },
   { name: 'Contact', link: '/contact' },
+  { name: 'Movies', link: '/movies' },
 ];
 
 const images = [
@@ -32,39 +33,46 @@ const images = [
 ];
 
 async function renderPage(response, page) {
+  const currentPath = page == 'index' ? '/' : `/${page}`;
+    page === '/' ? 0 : page === 'about' ? 1 : page === 'contact' ? 2 : 0;
   if (page === 'movies') {
     fetch(url, settings)
       .then((response) => response.json())
       .then((json) => {
-        const mappedMovies = json.data.map((movie) => {
-          return {
-            title: movie.title,
-            intro: movie.intro,
-            image: movie.image,
-          };
-        });
         response.render(page, {
-          allMovies: mappedMovies,
+          movieIDs: json.data.map((movie) => {
+            return {
+              id: movie.id,
+              title: movie.attributes.title,
+              intro: movie.attributes.intro,
+              image: movie.attributes.image.url,
+            };
+          }),
+          menuItems: MENU.map((item) => {
+            return {
+              active: currentPath == item.link,
+              name: item.name,
+              link: item.link,
+            };
+          }),
         });
       });
   } else {
-    async function renderPage(response, page) {
-      const activePage = page === '/' ? index : page;
-      const currentPath = page == 'index' ? '/' : `/${page}`;
-      const activeImage =
-        page === '/' ? 0 : page === 'about' ? 1 : page === 'contact' ? 2 : 0;
-      const activeImageIndex = images[activeImage][activePage];
-      response.render(page, {
-        menuItems: MENU.map((item) => {
-          return {
-            active: currentPath == item.link,
-            name: item.name,
-            link: item.link,
-          };
-        }),
-        image: activeImageIndex,
-      });
-    }
+    const activePage = page === '/' ? index : page;
+    const currentPath = page == 'index' ? '/' : `/${page}`;
+    const activeImage =
+      page === '/' ? 0 : page === 'about' ? 1 : page === 'contact' ? 2 : 0;
+    const activeImageIndex = images[activeImage][activePage];
+    response.render(page, {
+      menuItems: MENU.map((item) => {
+        return {
+          active: currentPath == item.link,
+          name: item.name,
+          link: item.link,
+        };
+      }),
+      image: activeImageIndex,
+    });
   }
 }
 
