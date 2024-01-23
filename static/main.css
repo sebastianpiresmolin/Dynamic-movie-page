@@ -51,6 +51,7 @@ nav {
 }
 .heroContainer img {
   width: 80vw;
+  max-width: 1000px;
 }
 .heroContainer h1 {
   text-align: center;
