@@ -8,8 +8,8 @@ Serva hela sidan med hjälp av node på port 5080, exempelvis express och dess �
 En sida ska vara en lista på filmer, där listan ska hämtas från ett API. Om en användare återkommer efter att fler filmer tillkommit ska det återspeglas på sidan.
 Varje film ska ha en egen sida som visar titel, intro och bild
 Använd följande API-resurser:
-Filmer: https://plankton-app-xhkom.ondigitalocean.app/api/movies 
-Enstaka film: https://plankton-app-xhkom.ondigitalocean.app/api/movies/<id> 
+Filmer: https://plankton-app-xhkom.ondigitalocean.app/api/movies
+Enstaka film: https://plankton-app-xhkom.ondigitalocean.app/api/movies/<id>
 Det ska finnas ett integrationstest som verifierar att filmsidor visar rätt titel
 För betyget Väl Godkänd krävs ytterligare tre moment:
 En annan template-motor än Handlebars ska användas för att rendera hela webbplatsen, inkl filmsidorna. Gör research och välj en template-motor. Motivera i inlämningen varför du valt den motor du valt.

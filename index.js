@@ -121,8 +121,11 @@ app.get('/movie/:id', async function (request, response) {
   renderPage(response, `/movie/${id}`);
 });
 
-app.get('');
-
 app.use(express.static('static'));
+
+app.get('*', async function (request, response) {
+  response.status(404);
+  renderPage(response, '404');
+});
 
 app.listen(5080);
