@@ -132,6 +132,7 @@ footer li {
   flex-direction: row;
   list-style: none;
   width: 80vw;
+  max-width: 1100px;
   justify-content: space-between;
   padding: 10px;
   border-style: solid;
@@ -141,7 +142,9 @@ footer li {
 }
 .allMovies img {
   width: 20vw;
+  max-width: 250px;
   height: 30vw;
+  max-height: 372px;
   margin: 10px;
   border-style: solid;
 }
