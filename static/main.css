@@ -5,11 +5,16 @@ html {
   background-color: white;
   margin: 0;
   overflow: x-hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 nav {
-  height: 12vh;
-  background-color: gray;
+  height: 6vw;
+  min-height: 75px;
+  background-color: rgb(124, 5, 5);
+  border-style: groove;
+  border-color: gold;
 }
 
 .menuItems {
@@ -18,6 +23,17 @@ nav {
   align-items: center;
   height: 100%;
   padding: 0;
+  margin: 0;
+}
+.menuItems a {
+  border-style: groove;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.menuItems a:hover {
+  background-color: black;
 }
 .menuItems li {
   list-style: none;
@@ -31,12 +47,19 @@ nav {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-evenly;
 }
 .heroContainer img {
-  width: 50vw;
+  width: 80vw;
+}
+.heroContainer h1 {
+  text-align: center;
+  line-height: 2em;
 }
 
 footer {
+  justify-content: center;
+  margin-top: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -44,8 +67,18 @@ footer {
   max-height: 12vh;
   width: 100vw;
   background-color: gray;
-  bottom: 0;
-  position: relative;
+  height: 6vw;
+  min-height: 75px;
+}
+footer a {
+  border-style: groove;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+footer a:hover {
+  background-color: black;
 }
 footer h1 {
   margin: 0px;
@@ -72,5 +105,57 @@ footer li {
 
 .active a {
   text-decoration: none;
+  color: white;
+  background-color: black;
+}
+
+.allMovies {
+  display: flex;
+  flex-direction: column;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+  justify-content: center;
+  align-content: center;
+}
+.main h1 {
+  text-align: center;
+}
+
+.allMovies {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  list-style: none;
+  width: 80vw;
+  justify-content: space-between;
+  padding: 10px;
+  border-style: solid;
+  border-radius: 5px;
+  margin: auto;
+  margin-bottom: 20px;
+}
+.allMovies img {
+  width: 20vw;
+  height: 30vw;
+  margin: 10px;
+  border-style: solid;
+}
+.allMovies a {
+  text-decoration: none;
   color: black;
+}
+.allMovies a:hover {
+  cursor: pointer;
+}
+
+li.movies {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
 }/*# sourceMappingURL=main.css.map */
