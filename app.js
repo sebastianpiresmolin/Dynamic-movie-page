@@ -62,8 +62,18 @@ async function renderPage(response, page) {
   } else if (page.startsWith('/movie/')) {
     const id = page.split('/')[2]; // Get the id from the URL
     fetch(`${url}/${id}`, settings) // Fetch the data for the specific movie
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          // Check if response was successful
+          throw new Error('Network response was not ok'); // Throw an error if not
+        }
+        return response.json();
+      })
       .then((json) => {
+        if (!json.data) {
+          // Check if data exists
+          throw new Error('No data found'); // Throw an error if not
+        }
         response.render('movie', {
           // Render the 'movie' view
           movie: {
@@ -80,6 +90,12 @@ async function renderPage(response, page) {
             };
           }),
         });
+      })
+      .catch((error) => {
+        // Catch any errors
+        console.error('Fetch Error:', error);
+        response.status(404);
+        renderPage(response, '404');
       });
   } else {
     const activePage = page === '/' ? index : page;
