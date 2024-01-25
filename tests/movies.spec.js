@@ -1,45 +1,36 @@
 import { expect, test } from '@jest/globals';
 import request from 'supertest';
 import app from '../app.js';
+import fetch from 'node-fetch';
 
-test('Encanto page shows title of movie', async () => {
-  const response = await request(app).get('/movie/1').expect(200);
+const url = 'https://plankton-app-xhkom.ondigitalocean.app/api/movies';
+const settings = { method: 'Get' };
 
-  expect(response.text).toMatch('Isle of dogs');
+let APImapped;
+
+beforeAll(async () => {
+  const response = await fetch(url, settings);
+  const json = await response.json();
+
+  let APIdata = json;
+  APImapped = APIdata.data.map((movies) => {
+    return {
+      id: movies.id,
+      title: movies.attributes.title,
+      intro: movies.attributes.intro,
+      image: movies.attributes.image.url,
+    };
+  });
 });
 
-test('Isle of dogs page shows title of movie', async () => {
-  const response = await request(app).get('/movie/2').expect(200);
+test(`page shows title of movie`, async () => {
+  for (let i = 0; i < APImapped.length; i++) {
+    const response = await request(app)
+      .get(`/movie/${APImapped[i].id}`)
+      .expect(200);
 
-  expect(response.text).toMatch('Encanto');
+    expect(response.text).toMatch(`${APImapped[i].title}`);
+    console.log(`Test ${i + 1} passed`);
+  }
 });
 
-test('The Shawshank Redemption page shows title of movie', async () => {
-  const response = await request(app).get('/movie/3').expect(200);
-
-  expect(response.text).toMatch('The Shawshank Redemption');
-});
-
-test('Min granne Totoro page shows title of movie', async () => {
-  const response = await request(app).get('/movie/4').expect(200);
-
-  expect(response.text).toMatch('Min granne Totoro');
-});
-
-test('The Muppets page shows title of movie', async () => {
-  const response = await request(app).get('/movie/5').expect(200);
-
-  expect(response.text).toMatch('The Muppets');
-});
-
-test('Forrest Gump page shows title of movie', async () => {
-  const response = await request(app).get('/movie/6').expect(200);
-
-  expect(response.text).toMatch('Forrest Gump');
-});
-
-test('Pulp Fiction page shows title of movie', async () => {
-  const response = await request(app).get('/movie/8').expect(200);
-
-  expect(response.text).toMatch('Pulp Fiction');
-});
