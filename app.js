@@ -4,6 +4,7 @@ import fetch from 'node-fetch';
 
 // API URL's
 const movieUrl = 'https://plankton-app-xhkom.ondigitalocean.app/api/movies';
+const screeningUrl = 'https://plankton-app-xhkom.ondigitalocean.app/api/screenings';
 
 // fetch settings
 const settingsGet = { method: 'Get' };
@@ -121,6 +122,24 @@ async function renderPage(response, page) {
   }
 }
 
+async function screening(response, page) {
+  fetch(screeningUrl, settingsGet)
+    .then((response) => response.json())
+    .then((json) => {
+      response.render(page, {
+        screenings: json.data.map((screenings) => {
+          return {
+            id: screenings.id,
+            title: screenings.attributes.title,
+            intro: screenings.attributes.intro,
+            image: screenings.attributes.image.url,
+          };
+        }),
+      });
+    });
+
+}
+
 app.get('/', async (request, response) => {
   renderPage(response, 'index');
 });
@@ -140,6 +159,10 @@ app.get('/movies', async (request, response) => {
 app.get('/movie/:id', async function (request, response) {
   const id = request.params.id;
   renderPage(response, `/movie/${id}`);
+});
+
+app.get('/screenings', async (request, response) => {
+  screening(response, 'screenings');
 });
 
 //The 404 Route (ALWAYS Keep this as the last route)
