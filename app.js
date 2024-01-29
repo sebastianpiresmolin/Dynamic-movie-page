@@ -2,14 +2,19 @@ import express from 'express';
 import { engine } from 'express-handlebars';
 import fetch from 'node-fetch';
 
-const url = 'https://plankton-app-xhkom.ondigitalocean.app/api/movies';
-const settings = { method: 'Get' };
+// API URL's
+const movieUrl = 'https://plankton-app-xhkom.ondigitalocean.app/api/movies';
+
+// fetch settings
+const settingsGet = { method: 'Get' };
 
 const app = express();
 
 app.engine('handlebars', engine());
 app.set('view engine', 'handlebars');
 app.set('views', './templates');
+
+app.use(express.static('static'));
 
 const MENU = [
   { name: 'Home', link: '/' },
@@ -33,12 +38,12 @@ const images = [
 ];
 
 async function renderPage(response, page) {
-  //Check to se if current page is index and also check which page is active so that I know which image to serve.
+  //Check to see if current page is index and also check which page is active so that I know which image to serve.
   const currentPath = page == 'index' ? '/' : `/${page}`;
   page === '/' ? 0 : page === 'about' ? 1 : page === 'contact' ? 2 : 0;
 
   if (page === 'movies') {
-    fetch(url, settings)
+    fetch(movieUrl, settingsGet)
       .then((response) => response.json())
       .then((json) => {
         response.render(page, {
@@ -61,7 +66,7 @@ async function renderPage(response, page) {
       });
   } else if (page.startsWith('/movie/')) {
     const id = page.split('/')[2]; // Get the id from the URL
-    fetch(`${url}/${id}`, settings) // Fetch the data for the specific movie
+    fetch(`${movieUrl}/${id}`, settingsGet) // Fetch the data for the specific movie
       .then((response) => {
         if (!response.ok) {
           // Check if response was successful
@@ -137,8 +142,7 @@ app.get('/movie/:id', async function (request, response) {
   renderPage(response, `/movie/${id}`);
 });
 
-app.use(express.static('static'));
-
+//The 404 Route (ALWAYS Keep this as the last route)
 app.get('*', async function (request, response) {
   response.status(404);
   renderPage(response, '404');
