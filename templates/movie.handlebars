@@ -1,5 +1,16 @@
-<div class='movieById'>
+<div class="movieById">
   <h2>{{movie.title}}</h2>
-  <img src='{{movie.image}}' alt='{{movie.title}}' />
+  <img src="{{movie.image}}" alt="{{movie.title}}" />
   <md-block>{{movie.intro}}</md-block>
+  <div>
+    <h3>Leave a review on this movie </h3>
+    <form id="form">
+      <input name="name" type="text" placeholder="Name" />
+      <input name="comment" type="text" placeholder="Leave comment" />
+      <input name="rating" type="text" placeholder="Give rating 1-5" />
+      <button type="submit"> Submit</button>
+    </form>
+  </div>
 </div>
+
+
