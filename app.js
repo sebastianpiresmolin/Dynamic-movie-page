@@ -1,17 +1,20 @@
+// Imports
 import express from 'express';
 import { engine } from 'express-handlebars';
 import fetch from 'node-fetch';
+import { stringify } from 'querystring';
 
 // API URL's
 const movieUrl = 'https://plankton-app-xhkom.ondigitalocean.app/api/movies';
-const screeningUrl =
-  'https://plankton-app-xhkom.ondigitalocean.app/api/screenings';
+const APIurl = 'https://plankton-app-xhkom.ondigitalocean.app';
 
 // fetch settings
 const settingsGet = { method: 'Get' };
+const settingsPost = { method: 'Post' };
 
 const app = express();
 
+// Set up handlebars
 app.engine('handlebars', engine());
 app.set('view engine', 'handlebars');
 app.set('views', './templates');
@@ -123,24 +126,41 @@ async function renderPage(response, page) {
   }
 }
 
-async function screening(response, page) {
-  const parts = page.split('?');
-  const queryString = parts.slice(1).join('?');
-
-  fetch(`${screeningUrl}${queryString}`, settingsGet)
+// Function to get the screenings for the home page
+async function homeScreening(response, page) {
+  // Fetch the screenings from the API
+  fetch(`${APIurl}${page}`, settingsGet)
     .then((response) => response.json())
     .then((json) => {
-      return(page, {
-        screenings: json.data.map((screenings) => {
-          console.log(screenings);
-          /*return {
-            id: screenings.attributes.movie.data.id,
-            title: screenings.attributes.movie.attributes.title,
-            image: screenings.attributes.movie.attributes.image.url,
-            image: screenings.attributes.movie.attributes.image.url,
-          };*/
-        }),
-      });
+      // Create an object with the screenings we need
+      const result = {
+        screenings: json.data
+          .filter((screening) => {
+            // Convert the start_time to a Date object
+            const startTime = new Date(screening.attributes.start_time);
+            // Get today's date
+            const today = new Date();
+            // Get the date for the upcoming five days
+            const fiveDays = new Date();
+            fiveDays.setDate(fiveDays.getDate() + 5);
+            // Remove the time from today's date
+            today.setHours(0, 0, 0, 0);
+            // Return true if the start_time is not earlier than today's date and not later than five days from today
+            return startTime >= today && startTime <= fiveDays;
+          })
+          .map((screenings) => {
+            // Picking out the data we need
+            return { 
+              id: screenings.id,
+              time: screenings.attributes.start_time,
+              room: screenings.attributes.room,
+              image: screenings.attributes.movie.data.attributes.image.url,
+              title: screenings.attributes.movie.data.attributes.title,
+            };
+          })
+          .slice(0, 10), // Only return the first 10 screenings
+      };
+      response.json(result); // Send the result as JSON to screening.js
     });
 }
 
@@ -166,8 +186,7 @@ app.get('/movie/:id', async function (request, response) {
 });
 
 app.get('/app/home/screenings', async (request, response) => {
-  const queryString = request.query;
-  screening(response, `/app/screenings${queryString}`);
+  homeScreening(response, `/api/screenings?populate=movie`);
 });
 
 //The 404 Route (ALWAYS Keep this as the last route)
