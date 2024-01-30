@@ -79,8 +79,7 @@ async function renderPage(response, page) {
           // Check if data exists
           throw new Error('No data found'); // Throw an error if not
         }
-        //Needed for the form reviews
-        movieTitle = json.data.attributes.title;
+       
 
         response.render('movie', {
           // Render the 'movie' view
@@ -131,13 +130,19 @@ app.post('/form', function (req, res) {
   const dataToAdd = req.body;
   const currentDate = new Date();
 
+// Validating rating as a number
+const parsedRating = parseInt(dataToAdd.rating);
+if (isNaN(parsedRating)) {
+  return res.status(400).json({ error: 'Rating must be a number' });
+}
+
       const payload = {
         data: {
-          "comment": dataToAdd.comment ,
-          "rating": parseInt(dataToAdd.rating) || 0, 
+          "comment": dataToAdd.comment,
+          "rating": parsedRating || 0, 
           "author": dataToAdd.name,
-          "verified": true , 
-          "movie": movieTitle, 
+          "verified": false , 
+          "movie": dataToAdd.movieTitle, 
           "createdAt": currentDate.toISOString(),
           "updatedAt": currentDate.toISOString(),
           "createdBy": dataToAdd.name, 
