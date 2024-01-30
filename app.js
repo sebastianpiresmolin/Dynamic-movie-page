@@ -5,6 +5,7 @@ import fetch from 'node-fetch';
 const url = 'https://plankton-app-xhkom.ondigitalocean.app/api/movies';
  const settings = { method: 'Get' };
 
+
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -145,8 +146,6 @@ if (isNaN(parsedRating)) {
           "movie": dataToAdd.movieTitle, 
           "createdAt": currentDate.toISOString(),
           "updatedAt": currentDate.toISOString(),
-          "createdBy": dataToAdd.name, 
-          "updatedBy": dataToAdd.name, 
         },
       };
     
@@ -210,6 +209,7 @@ app.get('*', async function (request, response) {
   response.status(404);
   renderPage(response, '404');
 });
+app.use(express.static('static'));
 
 export default app;
 
