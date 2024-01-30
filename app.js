@@ -3,7 +3,7 @@ import { engine } from 'express-handlebars';
 import fetch from 'node-fetch';
 
 const url = 'https://plankton-app-xhkom.ondigitalocean.app/api/movies';
-const settings = { method: 'Get' };
+ const settings = { method: 'Get' };
 
 const app = express();
 
@@ -115,6 +115,27 @@ async function renderPage(response, page) {
     });
   }
 }
+//REVIEW FORM 
+const form = document.getElementById('form');
+
+form.addEventListener('submit', function (e) {
+  e.preventDefault();
+
+  const payload = new FormData (form);
+
+  console.log([...payload]);
+
+  fetch('http://httpbin.org/post', {
+    method: "POST",
+    body: payload,
+  })
+  .then(res => res.json())
+  .then(data => console.log(data))
+  .catch(err => console.log(err));    
+});
+
+
+
 
 app.get('/', async (request, response) => {
   renderPage(response, 'index');
@@ -139,9 +160,12 @@ app.get('/movie/:id', async function (request, response) {
 
 app.use(express.static('static'));
 
+
+
 app.get('*', async function (request, response) {
   response.status(404);
   renderPage(response, '404');
 });
 
 export default app;
+
