@@ -6,6 +6,9 @@ const url = 'https://plankton-app-xhkom.ondigitalocean.app/api/movies';
  const settings = { method: 'Get' };
 
 const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 
 app.engine('handlebars', engine());
 app.set('view engine', 'handlebars');
@@ -31,6 +34,8 @@ const images = [
       'https://static.scientificamerican.com/sciam/cache/file/32665E6F-8D90-4567-9769D59E11DB7F26_source.jpg?w=900',
   },
 ];
+
+let movieTitle; //Needed for the review form
 
 async function renderPage(response, page) {
   //Check to se if current page is index and also check which page is active so that I know which image to serve.
@@ -74,6 +79,9 @@ async function renderPage(response, page) {
           // Check if data exists
           throw new Error('No data found'); // Throw an error if not
         }
+        //Needed for the form reviews
+        movieTitle = json.data.attributes.title;
+
         response.render('movie', {
           // Render the 'movie' view
           movie: {
@@ -115,33 +123,56 @@ async function renderPage(response, page) {
     });
   }
 }
-
-/*
-app.get('http://localhost:5080/upload', function (req, res) {
-  //Handle form upload
-  const dataToAdd = req.body;
-  console.log(dataToAdd + "hej!");
+app.get('/form', function (req, res) {
+  res.send('App.get form was successful.');
 });
 
-const data = JSON.stringify(dataToAdd);
+app.post('/form', function (req, res) {
+  const dataToAdd = req.body;
+  const currentDate = new Date();
 
-const options = {
-  method: "POST",
-  uri: "https://plankton-app-xhkom.ondigitalocean.app/api/reviews",
-  body: data,
-  json: true,
-  headers: {
-    "Content-Type": "applications/json",
-  },
-};
-request(options).then(function(response){
-  res.status(200).json(response);
-})
-.catch(function (err){
-  console.log(err);
-}) */
+      const payload = {
+        data: {
+          "comment": dataToAdd.comment ,
+          "rating": parseInt(dataToAdd.rating) || 0, 
+          "author": dataToAdd.name,
+          "verified": true , 
+          "movie": movieTitle, 
+          "createdAt": currentDate.toISOString(),
+          "updatedAt": currentDate.toISOString(),
+          "createdBy": dataToAdd.name, 
+          "updatedBy": dataToAdd.name, 
+        },
+      };
+    
+  
+  // Sending data to external api
+  fetch('https://plankton-app-xhkom.ondigitalocean.app/api/reviews'
+  , {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  })
+  .then((externalApiResponse) => externalApiResponse.json())
+  .then((externalApiData) => {
+    // Showing message if the post got through.
+    res.json({
+      message: 'Data from form received and forwarded to external API',
+      dataFromForm: dataToAdd,
+      dataFromExternalAPI: externalApiData,
+    });
+  })
+  .catch((error) => {
+    console.error('Error sending data to external API:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  });
+});
 
- 
+
+ /* https://plankton-app-xhkom.ondigitalocean.app/api/review
+ */
 
 
 
