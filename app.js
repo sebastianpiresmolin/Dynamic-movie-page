@@ -115,25 +115,33 @@ async function renderPage(response, page) {
     });
   }
 }
-//REVIEW FORM 
-const form = document.getElementById('form');
 
-form.addEventListener('submit', function (e) {
-  e.preventDefault();
-
-  const payload = new FormData (form);
-
-  console.log([...payload]);
-
-  fetch('http://httpbin.org/post', {
-    method: "POST",
-    body: payload,
-  })
-  .then(res => res.json())
-  .then(data => console.log(data))
-  .catch(err => console.log(err));    
+/*
+app.get('http://localhost:5080/upload', function (req, res) {
+  //Handle form upload
+  const dataToAdd = req.body;
+  console.log(dataToAdd + "hej!");
 });
 
+const data = JSON.stringify(dataToAdd);
+
+const options = {
+  method: "POST",
+  uri: "https://plankton-app-xhkom.ondigitalocean.app/api/reviews",
+  body: data,
+  json: true,
+  headers: {
+    "Content-Type": "applications/json",
+  },
+};
+request(options).then(function(response){
+  res.status(200).json(response);
+})
+.catch(function (err){
+  console.log(err);
+}) */
+
+ 
 
 
 
