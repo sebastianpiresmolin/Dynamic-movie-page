@@ -10,7 +10,7 @@ Example response:
 
 CODE: 200 OK
 {
-    "data"; [
+    "data": [
         {
             "id": "string",
             "attributes": {
