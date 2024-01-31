@@ -30,7 +30,6 @@ test(`page shows title of movie`, async () => {
       .expect(200);
 
     expect(response.text).toMatch(`${APImapped[i].title}`);
-    console.log(`Test ${i + 1} passed`);
   }
 });
 

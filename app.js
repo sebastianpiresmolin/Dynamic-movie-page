@@ -3,7 +3,7 @@ import express from 'express';
 import { engine } from 'express-handlebars';
 import fetch from 'node-fetch';
 import homeScreening from './src/homeScreening.js';
-import cmsAdapter from './src/cmsAdapter.js';
+import getTenScreeningsAdapter from './src/cmsAdapter.js';
 import getTenScreenings from './src/getTenScreenings.js';
 //import renderPage from './renderPage.js';
 
@@ -165,7 +165,7 @@ app.get('/api/home/screenings', async (request, response) => {
 });
 
 app.get('/api/getTenScreenings', async (reqest, response) => {
-  const data = await getTenScreenings(cmsAdapter);
+  const data = await getTenScreenings(getTenScreeningsAdapter);
   response.status(200).json(data);
 });
 
