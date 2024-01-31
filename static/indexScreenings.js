@@ -8,7 +8,7 @@ async function screening() {
 
 window.onload = async function () {
   const result = await screening();
-  console.log(result);
+  console.log(screenings);
   for (let i = 0; i < result.screenings.length; i++) {
     let li = document.createElement('li');
     let a = document.createElement('a');
