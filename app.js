@@ -153,8 +153,8 @@ if (isNaN(parsedRating)) {
     
   
   // Sending data to external api - 
-  //adding populate movie in end to get out the movie info too
-  fetch('https://plankton-app-xhkom.ondigitalocean.app/api/reviews?populate=movie'
+  //adding populate movie in end to get out the movie info too - ?populate=movie
+  fetch('https://plankton-app-xhkom.ondigitalocean.app/api/reviews'
   , {
     method: 'POST',
     headers: {
