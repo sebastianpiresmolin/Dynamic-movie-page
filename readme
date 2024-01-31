@@ -2,7 +2,7 @@ API DOCUMENTATION
 
 
 ----------------------------------------
-screenings
+indexScreenings
 ----------------------------------------
 GET /api/home/screenings?populate=movie
 

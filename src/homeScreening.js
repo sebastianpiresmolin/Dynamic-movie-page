@@ -32,7 +32,6 @@ async function homeScreening(response, page) {
             const newStartTime = `${datePart} ${timeParts[0]}:${timeParts[1]}`;
 
             // Picking out the data we need
-            console.log(newStartTime);
             return {
               id: screenings.id,
               movieId: screenings.attributes.movie.data.id,

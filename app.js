@@ -157,7 +157,7 @@ app.get('/movie/:id', async function (request, response) {
 });
 
 // API route for index page screenings
-app.get('/app/home/screenings', async (request, response) => {
+app.get('/api/home/screenings', async (request, response) => {
   const queryString = request._parsedUrl.query;
   homeScreening(response, `/api/screenings?${queryString}`);
 });

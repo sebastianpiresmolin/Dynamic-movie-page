@@ -1,14 +1,13 @@
 let screenings;
 
 async function screening() {
-  const response = await fetch('/app/home/screenings?populate=movie');
+  const response = await fetch('/api/home/screenings?populate=movie');
   screenings = await response.json();
   return screenings;
 }
 
 window.onload = async function () {
   const result = await screening();
-  console.log(screenings);
   for (let i = 0; i < result.screenings.length; i++) {
     let li = document.createElement('li');
     let a = document.createElement('a');
