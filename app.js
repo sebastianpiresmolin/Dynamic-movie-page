@@ -1,38 +1,35 @@
-import express from 'express';
-import { engine } from 'express-handlebars';
-import fetch from 'node-fetch';
-
-const url = 'https://plankton-app-xhkom.ondigitalocean.app/api/movies';
- const settings = { method: 'Get' };
-
+import express from "express";
+import { engine } from "express-handlebars";
+import fetch from "node-fetch";
+const url = "https://plankton-app-xhkom.ondigitalocean.app/api/movies";
+const settings = { method: "Get" };
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
-app.engine('handlebars', engine());
-app.set('view engine', 'handlebars');
-app.set('views', './templates');
+app.engine("handlebars", engine());
+app.set("view engine", "handlebars");
+app.set("views", "./templates");
 
 const MENU = [
-  { name: 'Home', link: '/' },
-  { name: 'About', link: '/about' },
-  { name: 'Contact', link: '/contact' },
-  { name: 'Movies', link: '/movies' },
+  { name: "Home", link: "/" },
+  { name: "About", link: "/about" },
+  { name: "Contact", link: "/contact" },
+  { name: "Movies", link: "/movies" },
 ];
 
 const images = [
   {
     index:
-      'https://static01.nyt.com/images/2023/12/12/climate/12cli-cats/12cli-cats-jumbo.jpg?quality=75&auto=webp',
+      "https://static01.nyt.com/images/2023/12/12/climate/12cli-cats/12cli-cats-jumbo.jpg?quality=75&auto=webp",
   },
   {
-    about: 'https://www.alleycat.org/wp-content/uploads/2019/03/FELV-cat.jpg',
+    about: "https://www.alleycat.org/wp-content/uploads/2019/03/FELV-cat.jpg",
   },
   {
     contact:
-      'https://static.scientificamerican.com/sciam/cache/file/32665E6F-8D90-4567-9769D59E11DB7F26_source.jpg?w=900',
+      "https://static.scientificamerican.com/sciam/cache/file/32665E6F-8D90-4567-9769D59E11DB7F26_source.jpg?w=900",
   },
 ];
 
@@ -40,10 +37,10 @@ let movieTitle; //Needed for the review form
 
 async function renderPage(response, page) {
   //Check to se if current page is index and also check which page is active so that I know which image to serve.
-  const currentPath = page == 'index' ? '/' : `/${page}`;
-  page === '/' ? 0 : page === 'about' ? 1 : page === 'contact' ? 2 : 0;
+  const currentPath = page == "index" ? "/" : `/${page}`;
+  page === "/" ? 0 : page === "about" ? 1 : page === "contact" ? 2 : 0;
 
-  if (page === 'movies') {
+  if (page === "movies") {
     fetch(url, settings)
       .then((response) => response.json())
       .then((json) => {
@@ -65,24 +62,23 @@ async function renderPage(response, page) {
           }),
         });
       });
-  } else if (page.startsWith('/movie/')) {
-    const id = page.split('/')[2]; // Get the id from the URL
+  } else if (page.startsWith("/movie/")) {
+    const id = page.split("/")[2]; // Get the id from the URL
     fetch(`${url}/${id}`, settings) // Fetch the data for the specific movie
       .then((response) => {
         if (!response.ok) {
           // Check if response was successful
-          throw new Error('Network response was not ok'); // Throw an error if not
+          throw new Error("Network response was not ok"); // Throw an error if not
         }
         return response.json();
       })
       .then((json) => {
         if (!json.data) {
           // Check if data exists
-          throw new Error('No data found'); // Throw an error if not
+          throw new Error("No data found"); // Throw an error if not
         }
-       
 
-        response.render('movie', {
+        response.render("movie", {
           // Render the 'movie' view
           movie: {
             id: json.data.id,
@@ -101,15 +97,15 @@ async function renderPage(response, page) {
       })
       .catch((error) => {
         // Catch any errors
-        console.error('Fetch Error:', error);
+        console.error("Fetch Error:", error);
         response.status(404);
-        renderPage(response, '404');
+        renderPage(response, "404");
       });
   } else {
-    const activePage = page === '/' ? index : page;
-    const currentPath = page == 'index' ? '/' : `/${page}`;
+    const activePage = page === "/" ? index : page;
+    const currentPath = page == "index" ? "/" : `/${page}`;
     const activeImage =
-      page === '/' ? 0 : page === 'about' ? 1 : page === 'contact' ? 2 : 0;
+      page === "/" ? 0 : page === "about" ? 1 : page === "contact" ? 2 : 0;
     const activeImageIndex = images[activeImage][activePage];
     response.render(page, {
       menuItems: MENU.map((item) => {
@@ -123,14 +119,19 @@ async function renderPage(response, page) {
     });
   }
 }
+
 // REVIEW FORM - DONT REMOVE ----------------------------
-app.get('/form', function (req, res) {
-  res.send('App.get form was successful.');
+app.get("/form", function (req, res) {
+  res.send("App.get form was successful.");
 });
 
-app.post('/form', function (req, res) {
+app.post("/form", async function (req, res) {
   const dataToAdd = req.body;
   const currentDate = new Date();
+  /*
+  const dataReviews = await sendNewFormReviews();
+  res.status(200).json(data);*/
+
 
 // Validating rating as a number
 const parsedRating = parseInt(dataToAdd.rating);
@@ -140,7 +141,7 @@ if (isNaN(parsedRating)) {
 
       const payload = {
         data: {
-          "comment": dataToAdd.comment,
+          "comment": dataToAdd.comment ,
           "rating": parsedRating || 0, 
           "author": dataToAdd.name,
           "verified": false , 
@@ -151,8 +152,9 @@ if (isNaN(parsedRating)) {
       };
     
   
-  // Sending data to external api
-  fetch('https://plankton-app-xhkom.ondigitalocean.app/api/reviews'
+  // Sending data to external api - 
+  //adding populate movie in end to get out the movie info too
+  fetch('https://plankton-app-xhkom.ondigitalocean.app/api/reviews?populate=movie'
   , {
     method: 'POST',
     headers: {
@@ -176,41 +178,37 @@ if (isNaN(parsedRating)) {
 });
 
 
- /* https://plankton-app-xhkom.ondigitalocean.app/api/review
+/* https://plankton-app-xhkom.ondigitalocean.app/api/review
  */
 // REVIEW FORM - DONT REMOVE -------------------------------------------
 
-
-app.get('/', async (request, response) => {
-  renderPage(response, 'index');
+app.get("/", async (request, response) => {
+  renderPage(response, "index");
 });
 
-app.get('/about', async (request, response) => {
-  renderPage(response, 'about');
+app.get("/about", async (request, response) => {
+  renderPage(response, "about");
 });
 
-app.get('/contact', async (request, response) => {
-  renderPage(response, 'contact');
+app.get("/contact", async (request, response) => {
+  renderPage(response, "contact");
 });
 
-app.get('/movies', async (request, response) => {
-  renderPage(response, 'movies');
+app.get("/movies", async (request, response) => {
+  renderPage(response, "movies");
 });
 
-app.get('/movie/:id', async function (request, response) {
+app.get("/movie/:id", async function (request, response) {
   const id = request.params.id;
   renderPage(response, `/movie/${id}`);
 });
 
-app.use(express.static('static'));
+app.use(express.static("static"));
 
-
-
-app.get('*', async function (request, response) {
+app.get("*", async function (request, response) {
   response.status(404);
-  renderPage(response, '404');
+  renderPage(response, "404");
 });
-app.use(express.static('static'));
+app.use(express.static("static"));
 
 export default app;
-
