@@ -123,6 +123,7 @@ async function renderPage(response, page) {
     });
   }
 }
+// REVIEW FORM - DONT REMOVE ----------------------------
 app.get('/form', function (req, res) {
   res.send('App.get form was successful.');
 });
@@ -177,7 +178,7 @@ if (isNaN(parsedRating)) {
 
  /* https://plankton-app-xhkom.ondigitalocean.app/api/review
  */
-
+// REVIEW FORM - DONT REMOVE -------------------------------------------
 
 
 app.get('/', async (request, response) => {
