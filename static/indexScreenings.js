@@ -31,7 +31,6 @@ window.onload = async function () {
     li.appendChild(room);
     li.appendChild(date);
     li.classList.add('screening');
-    console.log(result.screenings[i]);
     document.getElementById('screenings').appendChild(li);
   }
 };

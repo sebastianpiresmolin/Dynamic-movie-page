@@ -3,6 +3,8 @@ import express from 'express';
 import { engine } from 'express-handlebars';
 import fetch from 'node-fetch';
 import homeScreening from './src/homeScreening.js';
+import cmsAdapter from './src/cmsAdapter.js';
+import getTenScreenings from './src/getTenScreenings.js';
 //import renderPage from './renderPage.js';
 
 // API URL's
@@ -160,6 +162,11 @@ app.get('/movie/:id', async function (request, response) {
 app.get('/api/home/screenings', async (request, response) => {
   const queryString = request._parsedUrl.query;
   homeScreening(response, `/api/screenings?${queryString}`);
+});
+
+app.get('/api/getTenScreenings', async (reqest, response) => {
+  const data = await getTenScreenings(cmsAdapter);
+  response.status(200).json(data);
 });
 
 //The 404 Route (ALWAYS Keep this as the last route)
