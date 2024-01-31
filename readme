@@ -1,5 +1,6 @@
 API DOCUMENTATION
 
+Server: https://localhost:5080/api
 
 ----------------------------------------
 indexScreenings
@@ -9,24 +10,18 @@ GET /api/home/screenings?populate=movie
 Example response: 
 
 CODE: 200 OK
+
 {
-    "data": [
+    "screenings": [
         {
-            "id": "string",
-            "attributes": {
-                "start_time": "string",
-                "room": "string",
-                "movie": {
-                    "data": {
-                        "attributes": {
-                            "title": "string",
-                            "image": {
-                                "url": "string"
-                            }
-                        }
-                    }
-                }
-            }
+            "id": 207,
+            "movieId": 5,
+            "time": "2024-01-31 12:00",
+            "room": "Stora salongen",
+            "image": "https://m.media-amazon.com/images/M/MV5BMjE0MTM4NTc3NF5BMl5BanBnXkFtZTcwMjYzOTIxNg@@._V1_.jpg",
+            "title": "The Muppets"
         }
     ]
 }
+
+----------------------------------------
