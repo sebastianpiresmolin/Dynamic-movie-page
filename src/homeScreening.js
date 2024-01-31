@@ -35,6 +35,7 @@ async function homeScreening(response, page) {
             console.log(newStartTime);
             return {
               id: screenings.id,
+              movieId: screenings.attributes.movie.data.id,
               time: newStartTime,
               room: screenings.attributes.room,
               image: screenings.attributes.movie.data.attributes.image.url,

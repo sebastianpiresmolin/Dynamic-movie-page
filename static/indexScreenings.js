@@ -12,12 +12,12 @@ window.onload = async function () {
   for (let i = 0; i < result.screenings.length; i++) {
     let li = document.createElement('li');
     let a = document.createElement('a');
-    a.href = `/screenings/${result.screenings[i].id}`;
+    a.href = `./movie/${result.screenings[i].movieId}`;
     a.textContent = result.screenings[i].title;
 
     let img = document.createElement('img');
     img.src = result.screenings[i].image;
-    img.classList.add('screeningImage');
+    img.classList.add('screening-image');
     a.appendChild(img);
 
     let room = document.createElement('p');
