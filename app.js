@@ -1,8 +1,12 @@
 import express from 'express';
 import { engine } from 'express-handlebars';
 import fetch from 'node-fetch';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const url = 'https://plankton-app-xhkom.ondigitalocean.app/api/movies';
+const omdbApiKey = process.env.OMDB_API_KEY;
 const settings = { method: 'Get' };
 
 const app = express();
@@ -48,6 +52,7 @@ async function renderPage(response, page) {
               title: movies.attributes.title,
               intro: movies.attributes.intro,
               image: movies.attributes.image.url,
+              imdbRating: movies.imdbRating,
             };
           }),
           menuItems: MENU.map((item) => {
@@ -129,12 +134,60 @@ app.get('/contact', async (request, response) => {
 });
 
 app.get('/movies', async (request, response) => {
-  renderPage(response, 'movies');
+  renderPage(response, 'movies', true); // Set fetchRatings to true
 });
 
 app.get('/movie/:id', async function (request, response) {
   const id = request.params.id;
-  renderPage(response, `/movie/${id}`);
+  const currentPath = `/${id}`;
+  // Fetch the data for the specific movie from your movie API
+  fetch(`${url}/${id}`, settings)
+    .then(async (response) => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(async (json) => {
+      if (!json.data) {
+        throw new Error('No data found');
+      }
+
+      // Log the OMDB API request for this specific movie
+      const omdbUrl = `https://www.omdbapi.com/?apikey=${omdbApiKey}&t=${encodeURIComponent(json.data.attributes.title)}`;
+      console.log('OMDB URL:', omdbUrl);
+
+      const omdbResponse = await fetch(omdbUrl);
+      const omdbJson = await omdbResponse.json();
+      console.log('OMDB Response for', json.data.attributes.title, ':', omdbJson);
+
+      // Check if OMDB response contains the IMDb rating
+      const imdbRating = omdbJson.imdbRating || 'N/A';
+      console.log('IMDb Rating for', json.data.attributes.title, ':', imdbRating);
+
+      // Render the 'movie' view
+      response.render('movie', {
+        movie: {
+          id: json.data.id,
+          title: json.data.attributes.title,
+          intro: json.data.attributes.intro,
+          image: json.data.attributes.image.url,
+        },
+        menuItems: MENU.map((item) => {
+          return {
+            active: currentPath == item.link,
+            name: item.name,
+            link: item.link,
+          };
+        }),
+        imdbRating: imdbRating,
+      });
+    })
+    .catch((error) => {
+      console.error('Fetch Error:', error);
+      response.status(404);
+      renderPage(response, '404');
+    });
 });
 
 app.use(express.static('static'));
