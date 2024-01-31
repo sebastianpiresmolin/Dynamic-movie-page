@@ -1,7 +1,7 @@
 let screenings;
 
 async function screening() {
-  const response = await fetch('/app/home/screenings');
+  const response = await fetch('/app/home/screenings?populate=movie');
   screenings = await response.json();
   return screenings;
 }

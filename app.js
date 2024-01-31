@@ -26,9 +26,9 @@ app.use(express.static('static'));
 // Navbar menu items
 export const MENU = [
   { name: 'Home', link: '/' },
+  { name: 'Movies', link: '/movies' },
   { name: 'About', link: '/about' },
   { name: 'Contact', link: '/contact' },
-  { name: 'Movies', link: '/movies' },
 ];
 
 // Images for index, about and contact page
@@ -158,7 +158,8 @@ app.get('/movie/:id', async function (request, response) {
 
 // API route for index page screenings
 app.get('/app/home/screenings', async (request, response) => {
-  homeScreening(response, `/api/screenings?populate=movie`);
+  const queryString = request._parsedUrl.query;
+  homeScreening(response, `/api/screenings?${queryString}`);
 });
 
 //The 404 Route (ALWAYS Keep this as the last route)
