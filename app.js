@@ -121,11 +121,12 @@ async function renderPage(response, page) {
 }
 
 // REVIEW FORM - DONT REMOVE ----------------------------
-app.get("/form", function (req, res) {
+app.get("/form", function (req, res)  /* {
   res.send("App.get form was successful.");
+  res.status(200).json(data);
 });
 
-app.post("/form", async function (req, res) {
+app.post("/form", async function (req, res) */ { 
   const dataToAdd = req.body;
   const currentDate = new Date();
   /*
