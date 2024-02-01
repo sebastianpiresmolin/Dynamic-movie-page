@@ -2,9 +2,11 @@
   <h2>{{movie.title}}</h2>
   <img src='{{movie.image}}' alt='{{movie.title}}' />
   <md-block>{{movie.intro}}</md-block>
-  {{#if imdbRating}}
-    <p>IMDb Rating: {{imdbRating}}</p>
+  
+  {{#if rating}}
+    <p>Rating: {{rating}}</p>
   {{else}}
-    <p>IMDb Rating: N/A</p>
+    <p>No rating available</p>
   {{/if}}
+
 </div>

@@ -37,7 +37,6 @@ const images = [
 ];
 
 async function renderPage(response, page) {
-  //Check to se if current page is index and also check which page is active so that I know which image to serve.
   const currentPath = page == 'index' ? '/' : `/${page}`;
   page === '/' ? 0 : page === 'about' ? 1 : page === 'contact' ? 2 : 0;
 
@@ -65,22 +64,20 @@ async function renderPage(response, page) {
         });
       });
   } else if (page.startsWith('/movie/')) {
-    const id = page.split('/')[2]; // Get the id from the URL
-    fetch(`${url}/${id}`, settings) // Fetch the data for the specific movie
+    const id = page.split('/')[2];
+    fetch(`${url}/${id}`, settings) 
       .then((response) => {
         if (!response.ok) {
-          // Check if response was successful
-          throw new Error('Network response was not ok'); // Throw an error if not
+          throw new Error('Network response was not ok');
         }
         return response.json();
       })
       .then((json) => {
         if (!json.data) {
-          // Check if data exists
-          throw new Error('No data found'); // Throw an error if not
+          throw new Error('No data found');
         }
         response.render('movie', {
-          // Render the 'movie' view
+
           movie: {
             id: json.data.id,
             title: json.data.attributes.title,
@@ -97,7 +94,6 @@ async function renderPage(response, page) {
         });
       })
       .catch((error) => {
-        // Catch any errors
         console.error('Fetch Error:', error);
         response.status(404);
         renderPage(response, '404');
@@ -134,13 +130,13 @@ app.get('/contact', async (request, response) => {
 });
 
 app.get('/movies', async (request, response) => {
-  renderPage(response, 'movies', true); // Set fetchRatings to true
+  renderPage(response, 'movies', true);
 });
 
 app.get('/movie/:id', async function (request, response) {
   const id = request.params.id;
   const currentPath = `/${id}`;
-  // Fetch the data for the specific movie from your movie API
+  
   fetch(`${url}/${id}`, settings)
     .then(async (response) => {
       if (!response.ok) {
@@ -153,7 +149,6 @@ app.get('/movie/:id', async function (request, response) {
         throw new Error('No data found');
       }
 
-      // Log the OMDB API request for this specific movie
       const omdbUrl = `https://www.omdbapi.com/?apikey=${omdbApiKey}&t=${encodeURIComponent(json.data.attributes.title)}`;
       console.log('OMDB URL:', omdbUrl);
 
@@ -161,11 +156,12 @@ app.get('/movie/:id', async function (request, response) {
       const omdbJson = await omdbResponse.json();
       console.log('OMDB Response for', json.data.attributes.title, ':', omdbJson);
 
-      // Check if OMDB response contains the IMDb rating
-      const imdbRating = omdbJson.imdbRating || 'N/A';
-      console.log('IMDb Rating for', json.data.attributes.title, ':', imdbRating);
+      const localReviews = json.data.attributes.reviews;
+      const averageRating = calculateAverageRating(localReviews);
 
-      // Render the 'movie' view
+      const imdbRating = omdbJson.imdbRating || 'N/A';
+
+
       response.render('movie', {
         movie: {
           id: json.data.id,
@@ -180,7 +176,7 @@ app.get('/movie/:id', async function (request, response) {
             link: item.link,
           };
         }),
-        imdbRating: imdbRating,
+        rating: localReviews.length >= 5 ? averageRating : imdbRating,
       });
     })
     .catch((error) => {
@@ -189,6 +185,11 @@ app.get('/movie/:id', async function (request, response) {
       renderPage(response, '404');
     });
 });
+
+function calculateAverageRating(reviews) {
+  const sum = reviews.reduce((total, review) => total + review.rating, 0);
+  return (sum / reviews.length).toFixed(1);
+}
 
 app.use(express.static('static'));
 
