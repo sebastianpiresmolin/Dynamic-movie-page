@@ -5,7 +5,7 @@ Server: https://localhost:5080/api
 ----------------------------------------
 indexScreenings
 ----------------------------------------
-GET /api/home/screenings?populate=movie
+GET /api/home/screenings
 
 Example response: 
 

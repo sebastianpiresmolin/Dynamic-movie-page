@@ -5,7 +5,7 @@ export default async function getTenScreenings(getTenScreeningsAdapter) {
     .filter((screening) => {
       // Convert the start_time to a Date object
       console.log(screening);
-      const startTime = new Date(screening.attributes.start_time);
+      const startTime = new Date(screening.time);
       // Get today's date
       const today = new Date();
       // Get the date for the upcoming five days
@@ -20,7 +20,7 @@ export default async function getTenScreenings(getTenScreeningsAdapter) {
     })
     .map((screenings) => {
       // Split the start_time string to remove unwanted characters
-      const parts = screenings.attributes.start_time.split('T');
+      const parts = screenings.time.split('T');
       const datePart = parts[0];
       const timeParts = parts[1].split('Z')[0].split(':');
 
