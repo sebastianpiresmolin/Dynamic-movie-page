@@ -5,6 +5,7 @@ import fetch from 'node-fetch';
 import homeScreening from './src/homeScreening.js';
 import getTenScreeningsAdapter from './src/cmsAdapter.js';
 import getTenScreenings from './src/getTenScreenings.js';
+import moviePage from './src/moviePage.js';
 //import renderPage from './renderPage.js';
 
 // API URL's
@@ -161,6 +162,12 @@ app.get('/movie/:id', async function (request, response) {
 // API route for index page screenings
 app.get('/api/home/screenings', async (request, response) => {
   homeScreening(response, `/api/screenings?populate=movie`);
+});
+
+// API route for individual movie page screenings (client-side fetching)
+app.get('/movie/:id/screenings', async (request, response) => {
+  const movieId = request.params.id;
+  moviePage(response, `/api/screenings?filters[movie]=${movieId}`);
 });
 
 app.get('/api/getTenScreenings', async (reqest, response) => {
