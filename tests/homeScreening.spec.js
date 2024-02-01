@@ -14,22 +14,25 @@ test('Only show screenings for the next five days', async () => {
   expect(data).toHaveLength(2);
 });
 
-test('Show max 10 screenings', async () => {
+test('Only show screenings for the next five days', async () => {
   const getTenScreeningsAdapter = {
-    loadAllScreening: async () => [
+    loadAllScreenings: async () => [
       mockTime({ start_time: '2024-02-02T19:00:00.000Z' }),
+      mockTime({ start_time: '2024-02-03T19:00:00.000Z' }),
       mockTime({ start_time: '2024-02-02T19:00:00.000Z' }),
+      mockTime({ start_time: '2024-02-03T19:00:00.000Z' }),
       mockTime({ start_time: '2024-02-02T19:00:00.000Z' }),
+      mockTime({ start_time: '2024-02-03T19:00:00.000Z' }),
       mockTime({ start_time: '2024-02-02T19:00:00.000Z' }),
+      mockTime({ start_time: '2024-02-03T19:00:00.000Z' }),
       mockTime({ start_time: '2024-02-02T19:00:00.000Z' }),
+      mockTime({ start_time: '2024-02-03T19:00:00.000Z' }),
       mockTime({ start_time: '2024-02-02T19:00:00.000Z' }),
-      mockTime({ start_time: '2024-02-02T19:00:00.000Z' }),
-      mockTime({ start_time: '2024-02-02T19:00:00.000Z' }),
-      mockTime({ start_time: '2024-02-02T19:00:00.000Z' }),
-      mockTime({ start_time: '2024-02-02T19:00:00.000Z' }),
-      mockTime({ start_time: '2024-02-02T19:00:00.000Z' }),
+      mockTime({ start_time: '2024-02-03T19:00:00.000Z' }),
+      mockTime({ start_time: '2024-02-10T19:00:00.000Z' }),
     ],
   };
+
   const data = await getTenScreenings(getTenScreeningsAdapter);
   expect(data).toHaveLength(10);
 });

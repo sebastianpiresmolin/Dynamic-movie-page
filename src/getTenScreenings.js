@@ -1,10 +1,8 @@
 export default async function getTenScreenings(getTenScreeningsAdapter) {
   const screenings = await getTenScreeningsAdapter.loadAllScreenings();
-  console.log(screenings);
   return screenings
     .filter((screening) => {
       // Convert the start_time to a Date object
-      console.log(screening);
       const startTime = new Date(screening.time);
       // Get today's date
       const today = new Date();
@@ -36,5 +34,6 @@ export default async function getTenScreenings(getTenScreeningsAdapter) {
         image: screenings.attributes.movie.data.attributes.image.url,
         title: screenings.attributes.movie.data.attributes.title,
       };
-    });
+    })
+    .slice(0, 10);
 }
