@@ -1,0 +1,65 @@
+import { expect, test } from '@jest/globals';
+import request from 'supertest';
+import app from '../app.js';
+import fetch from 'node-fetch';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+const url = 'https://plankton-app-xhkom.ondigitalocean.app/api/movies';
+const omdbApiKey = process.env.OMDB_API_KEY;
+const settings = { method: 'Get' };
+
+let movies; // Define movies as a global variable
+
+// Fetch movie data from the API
+async function fetchMovies() {
+    const response = await fetch(url, settings);
+    const json = await response.json();
+    return json.data;
+}
+
+// Fetch IMDb rating from OMDB API
+async function fetchOmdbRating(title) {
+    const omdbApiUrl = `https://www.omdbapi.com/?apikey=${omdbApiKey}&t=${encodeURIComponent(title)}`;
+    const omdbApiResponse = await fetch(omdbApiUrl);
+    const omdbJson = await omdbApiResponse.json();
+    return omdbJson.imdbRating;
+}
+
+test.each(movies.map((movie) => [movie.attributes.title]))(
+    "page displays correct IMDb rating for %s",
+    async (title) => {
+        try {
+            const omdbRating = await fetchOmdbRating(title);
+
+            const responseFromApp = await request(app)
+                .get(`/movie/${title}`)
+                .expect(200);
+
+            console.log(`HTML content for ${title}: ${responseFromApp.text}`);
+
+            // Extract IMDb rating from the HTML content
+            const matchResult = responseFromApp.text.match(/<p>IMDb Rating: ([\d.]+|N\/A)<\/p>/);
+            const imdbRatingFromPage = matchResult && matchResult[1] ? matchResult[1] : null;
+
+            // Check if the matchResult exists and has the correct rating
+            if (omdbRating === "N/A") {
+                expect(imdbRatingFromPage).toBe("N/A");
+            } else {
+                expect(imdbRatingFromPage).toBe(omdbRating);
+            }
+        } catch (error) {
+            // Handle errors appropriately
+            console.error(error.message);
+            throw error;
+        }
+    }
+);
+
+// Fetch movies before running tests
+beforeAll(async () => {
+    movies = await fetchMovies();
+});
+
+export { }; // Ensure this file is treated as a module

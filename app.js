@@ -150,14 +150,12 @@ app.get('/movie/:id', async function (request, response) {
       }
 
       const omdbUrl = `https://www.omdbapi.com/?apikey=${omdbApiKey}&t=${encodeURIComponent(json.data.attributes.title)}`;
-      console.log('OMDB URL:', omdbUrl);
 
       const omdbResponse = await fetch(omdbUrl);
       const omdbJson = await omdbResponse.json();
-      console.log('OMDB Response for', json.data.attributes.title, ':', omdbJson);
 
-      const localReviews = json.data.attributes.reviews;
-      const averageRating = calculateAverageRating(localReviews);
+      //const localReviews = json.data.attributes.reviews;
+      //const averageRating = calculateAverageRating(localReviews);
 
       const imdbRating = omdbJson.imdbRating || 'N/A';
 
@@ -176,7 +174,7 @@ app.get('/movie/:id', async function (request, response) {
             link: item.link,
           };
         }),
-        rating: localReviews.length >= 5 ? averageRating : imdbRating,
+        imdbRating: imdbRating,// rating: localReviews.length >= 5 ? averageRating : imdbRating, //
       });
     })
     .catch((error) => {
@@ -186,10 +184,10 @@ app.get('/movie/:id', async function (request, response) {
     });
 });
 
-function calculateAverageRating(reviews) {
-  const sum = reviews.reduce((total, review) => total + review.rating, 0);
-  return (sum / reviews.length).toFixed(1);
-}
+// function calculateAverageRating(reviews) {
+//  const sum = reviews.reduce((total, review) => total + review.rating, 0);
+//  return (sum / reviews.length).toFixed(1);
+//}
 
 app.use(express.static('static'));
 
