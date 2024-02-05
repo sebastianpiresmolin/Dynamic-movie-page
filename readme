@@ -2,6 +2,7 @@ npm install - Install all dependencies
 npm start - Run server
 npm test - Run test suites
 npm run test:watch - Run tests every save
+npm run build - Compile sass
 
 API DOCUMENTATION
 
