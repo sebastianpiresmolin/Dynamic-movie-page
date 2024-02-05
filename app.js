@@ -126,11 +126,11 @@ app.post("/movies/:movieId/review", (request, response) => {
   const author = request.body.author;
 
   const reviewAttributes = {
-    Movie: id,
-    Comment: comment,
-    Rating: rating,
-    Author: author,
-    CreatedBy: author,
+    movie: id,
+    comment: comment,
+    rating: rating,
+    author: author,
+    createdBy: author,
   };
   console.log(reviewAttributes);
 
@@ -140,9 +140,6 @@ app.post("/movies/:movieId/review", (request, response) => {
   const fetchUrl = `https://plankton-app-xhkom.ondigitalocean.app/api/reviews`;
   fetch(fetchUrl, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: jsonData,
   })
     .then((response) => {
@@ -160,119 +157,7 @@ app.post("/movies/:movieId/review", (request, response) => {
       response.status(500).send("Error writing to database");
     });
 });
-/*
-app.post("/form", async function (req, res) {
-  try {
-    const dataToAdd = req.body;
-    const currentDate = new Date();
 
-    // Validating rating as a number
-    const parsedRating = parseInt(dataToAdd.rating);
-    if (isNaN(parsedRating)) {
-      return res.status(400).json({ error: 'Rating must be a number' });
-    }
-
-    const payload = {
-      data: {
-        "comment": dataToAdd.comment,
-        "rating": parsedRating || 0,
-        "author": dataToAdd.name,
-        "verified": false,
-        "movie": dataToAdd.movieTitle,
-        "createdAt": currentDate.toISOString(),
-        "updatedAt": currentDate.toISOString(),
-      },
-    };
-
-    // Sending data to external api
-    const externalApiResponse = await fetch('https://plankton-app-xhkom.ondigitalocean.app/api/reviews', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
-    });
-
-    if (!externalApiResponse.ok) {
-      console.error('Error sending data to external API:', externalApiResponse.statusText);
-      return res.status(500).json({ error: 'Internal Server Error' });
-    }
-
-    const externalApiData = await externalApiResponse.json();
-
-    // Showing message if the post got through.
-    res.json({
-      message: 'Data from form received and forwarded to external API',
-      dataFromForm: dataToAdd,
-      dataFromExternalAPI: externalApiData,
-    });
-  } catch (error) {
-    console.error('Error in form submission:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
-
-
-/*
-app.get("/form", function (req, res)   {
-  res.send("App.get form was successful.");
-  res.status(200).json(data);
-});
-
-app.post("/form", async function (req, res) */ /* { 
-   /* const dataToAdd = req.body;
-  const currentDate = new Date(); 
-  /*
-  const dataReviews = await sendNewFormReviews();
-  res.status(200).json(data);
-
-
-// Validating rating as a number
-const parsedRating = parseInt(dataToAdd.rating);
-if (isNaN(parsedRating)) {
-  return res.status(400).json({ error: 'Rating must be a number' });
-}
-
-      const payload = {
-        data: {
-          "comment": dataToAdd.comment ,
-          "rating": parsedRating || 0, 
-          "author": dataToAdd.name,
-          "verified": false , 
-          "movie": dataToAdd.movieTitle, 
-          "createdAt": currentDate.toISOString(),
-          "updatedAt": currentDate.toISOString(),
-        },
-      };
-    
-  
-  // Sending data to external api - 
-  fetch('https://plankton-app-xhkom.ondigitalocean.app/api/reviews'
-  , {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(payload),
-  })
-  .then((externalApiResponse) => externalApiResponse.json())
-  .then((externalApiData) => {
-    // Showing message if the post got through.
-    res.json({
-      message: 'Data from form received and forwarded to external API',
-      dataFromForm: dataToAdd,
-      dataFromExternalAPI: externalApiData,
-    });
-  })
-  .catch((error) => {
-    console.error('Error sending data to external API:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  });
-});
- */
-
-/* https://plankton-app-xhkom.ondigitalocean.app/api/review
- */
 // REVIEW FORM - DONT REMOVE -------------------------------------------
 
 app.get("/", async (request, response) => {
