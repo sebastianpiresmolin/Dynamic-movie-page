@@ -39,25 +39,31 @@ document.addEventListener("DOMContentLoaded", function () {
   const form = document.getElementById("reviewForm");
 
   //Eventlistener when user clicks submit button
-form.addEventListener('submit', function (e) {
-  e.preventDefault();
+  form.addEventListener("submit", async function (e) {
+    e.preventDefault();
+    /*
+    const formData = new FormData(form);
+    const payload = new URLSearchParams(formData); 
+    */
+    const comment = document.querySelector("#comment").value;
+    const movieId = document.querySelector("#movieTitle").value;
+    const rating = document.querySelector("#rating").value;
+    const name = document.querySelector("#name").value;
 
-  const formData = new FormData (form);
-  const payload = new URLSearchParams(formData);
+    const payload = new URLSearchParams();
+    payload.append("id", movieId);
+    payload.append("comment", comment);
+    payload.append("rating", rating);
+    payload.append("author", name);
 
-  console.log([...payload]);
+    console.log([...payload]);
 
-  fetch('/form', {
-    method: "POST",
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    body: payload,
-  })
-  .then((res) => res.json())
-  .then((data) => console.log(data))
-  .catch((err)  => console.log(err));
-  
-
-});
+    const response = await fetch("/movies/:movieId/review", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: payload,
+    });
+  });
 });

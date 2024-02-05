@@ -5,10 +5,10 @@
   <div>
     <h3>Leave a review on this movie </h3>
     <form id="reviewForm" >
-      <input type="hidden" name="movieTitle" value="{{ movie.title }}">
-      <input name="name" type="text" placeholder="Name" />
-      <input name="comment" type="text" placeholder="Leave comment" />
-      <input name="rating" type="text" placeholder="Give rating 1-5" />
+      <input id="movietitle" type="hidden" name="movieTitle" value="{{ movie.title }}">
+      <input id="name" name="name" type="text" placeholder="Name" />
+      <input id="comment" name="comment" type="text" placeholder="Leave comment" />
+      <input id="rating" name="rating" type="text" placeholder="Give rating 1-5" />
       <button type="submit"> Submit</button>
     </form>
   </div>

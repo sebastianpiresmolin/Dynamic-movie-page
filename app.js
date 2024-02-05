@@ -33,8 +33,6 @@ const images = [
   },
 ];
 
-let movieTitle; //Needed for the review form
-
 async function renderPage(response, page) {
   //Check to se if current page is index and also check which page is active so that I know which image to serve.
   const currentPath = page == "index" ? "/" : `/${page}`;
@@ -121,6 +119,48 @@ async function renderPage(response, page) {
 }
 
 // REVIEW FORM - DONT REMOVE ----------------------------
+app.post("/movies/:movieId/review", (request, response) => {
+  const id = request.params.movieId;
+  const comment = request.body.comment;
+  const rating = request.body.rating;
+  const author = request.body.author;
+
+  const reviewAttributes = {
+    Movie: id,
+    Comment: comment,
+    Rating: rating,
+    Author: author,
+    CreatedBy: author,
+  };
+  console.log(reviewAttributes);
+
+  // Convert the JavaScript object to a JSON string
+  const jsonData = JSON.stringify(reviewAttributes);
+
+  const fetchUrl = `https://plankton-app-xhkom.ondigitalocean.app/api/reviews`;
+  fetch(fetchUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: jsonData,
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Failed to write data to database");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      // console.log("Data written to database:", data);
+      response.status(201).send("Data written to database");
+    })
+    .catch((error) => {
+      console.error("Error writing to database:", error.message);
+      response.status(500).send("Error writing to database");
+    });
+});
+/*
 app.post("/form", async function (req, res) {
   try {
     const dataToAdd = req.body;
@@ -179,7 +219,7 @@ app.get("/form", function (req, res)   {
   res.status(200).json(data);
 });
 
-app.post("/form", async function (req, res) */  /* { 
+app.post("/form", async function (req, res) */ /* { 
    /* const dataToAdd = req.body;
   const currentDate = new Date(); 
   /*
