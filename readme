@@ -3,7 +3,6 @@ npm start - Run server
 npm test - Run test suites
 npm run test:watch - Run tests every save
 
-
 API DOCUMENTATION
 
 Server: https://localhost:5080/api
