@@ -1,6 +1,7 @@
 import express from "express";
 import { engine } from "express-handlebars";
 import fetch from "node-fetch";
+import { builder } from "./buildReviewBody.js";
 const url = "https://plankton-app-xhkom.ondigitalocean.app/api/movies";
 const settings = { method: "Get" };
 
