@@ -7,7 +7,8 @@
   "scripts": {
     "start": "node .",
     "test": " cross-env NODE_OPTIONS=--experimental-vm-modules jest",
-    "test:watch": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --watchAll"
+    "test:watch": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --watchAll",
+    "build": "sass main.scss static/main.css"
   },
   "author": "",
   "license": "ISC",
