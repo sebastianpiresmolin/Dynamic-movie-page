@@ -46,7 +46,19 @@ document.addEventListener("DOMContentLoaded", function () {
     const payload = new URLSearchParams(formData); 
     */
     const comment = document.querySelector("#comment").value;
-    const movieId = document.querySelector("#movieTitle").value;
+    /*const movieId = document.querySelector("#movieTitle").value;*/
+
+    // Get the current URL
+    const currentUrl = window.location.href;
+
+    // Split the URL by "/"
+    const parts = currentUrl.split("/");
+
+    // Extract the last part of the URL, which should be "8"
+    const movieId = parts[parts.length - 1];
+
+    console.log(movieId); // Outputs: 8
+
     const rating = document.querySelector("#rating").value;
     const name = document.querySelector("#name").value;
 
