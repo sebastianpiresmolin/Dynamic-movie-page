@@ -121,7 +121,7 @@ async function renderPage(response, page) {
 
 // REVIEW FORM - DONT REMOVE ----------------------------
 app.post("/movies/:movieId/review", (request, response) => {
-  const id = request.params.movieId;
+  const id = request.body.id;
   const comment = request.body.comment;
   const rating = request.body.rating;
   const author = request.body.author;
@@ -136,11 +136,14 @@ app.post("/movies/:movieId/review", (request, response) => {
   console.log(reviewAttributes);
 
   // Convert the JavaScript object to a JSON string
-  const jsonData = JSON.stringify(reviewAttributes);
-
-  const fetchUrl = `https://plankton-app-xhkom.ondigitalocean.app/api/reviews`;
+  const jsonData = JSON.stringify(builder(reviewAttributes));
+  console.log(jsonData);
+  const fetchUrl = "https://plankton-app-xhkom.ondigitalocean.app/api/reviews";
   fetch(fetchUrl, {
     method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
     body: jsonData,
   })
     .then((response) => {
