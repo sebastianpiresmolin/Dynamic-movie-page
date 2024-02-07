@@ -1,26 +1,51 @@
-import express from "express";
-import { engine } from "express-handlebars";
-import fetch from "node-fetch";
+// Imports
+import express from 'express';
+import { engine } from 'express-handlebars';
+import fetch from 'node-fetch';
+import homeScreening from './src/homeScreening.js';
+import getTenScreeningsAdapter from './src/cmsAdapter.js';
+import getTenScreenings from './src/getTenScreenings.js';
+import moviePage from './src/moviePage.js';
+//import renderPage from './renderPage.js';
 import { builder } from "./buildReviewBody.js";
-const url = "https://plankton-app-xhkom.ondigitalocean.app/api/movies";
-const settings = { method: "Get" };
+
+// API URL's
+export const movieUrl =
+  'https://plankton-app-xhkom.ondigitalocean.app/api/movies';
+export const APIurl = 'https://plankton-app-xhkom.ondigitalocean.app';
+
+// fetch settings
+export const settingsGet = { method: 'Get' };
+export const settingsPost = { method: 'Post' };
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.engine("handlebars", engine());
-app.set("view engine", "handlebars");
-app.set("views", "./templates");
 
 const MENU = [
   { name: "Home", link: "/" },
   { name: "About", link: "/about" },
   { name: "Contact", link: "/contact" },
   { name: "Movies", link: "/movies" },
+]
+// Set up handlebars
+app.engine('handlebars', engine());
+app.set('view engine', 'handlebars');
+app.set('views', './templates');
+
+app.use(express.static('static'));
+
+// Navbar menu items
+export const MENU = [
+  { name: 'Home', link: '/' },
+  { name: 'Movies', link: '/movies' },
+  { name: 'About', link: '/about' },
+  { name: 'Contact', link: '/contact' },
 ];
 
-const images = [
+// Images for index, about and contact page
+export const images = [
   {
     index:
       "https://static01.nyt.com/images/2023/12/12/climate/12cli-cats/12cli-cats-jumbo.jpg?quality=75&auto=webp",
@@ -35,12 +60,12 @@ const images = [
 ];
 
 async function renderPage(response, page) {
-  //Check to se if current page is index and also check which page is active so that I know which image to serve.
-  const currentPath = page == "index" ? "/" : `/${page}`;
-  page === "/" ? 0 : page === "about" ? 1 : page === "contact" ? 2 : 0;
+  //Check to see if current page is index and also check which page is active so that I know which image to serve.
+  const currentPath = page == 'index' ? '/' : `/${page}`;
+  page === '/' ? 0 : page === 'about' ? 1 : page === 'contact' ? 2 : 0;
 
-  if (page === "movies") {
-    fetch(url, settings)
+  if (page === 'movies') {
+    fetch(movieUrl, settingsGet)
       .then((response) => response.json())
       .then((json) => {
         response.render(page, {
@@ -61,9 +86,9 @@ async function renderPage(response, page) {
           }),
         });
       });
-  } else if (page.startsWith("/movie/")) {
-    const id = page.split("/")[2]; // Get the id from the URL
-    fetch(`${url}/${id}`, settings) // Fetch the data for the specific movie
+  } else if (page.startsWith('/movie/')) {
+    const id = page.split('/')[2]; // Get the id from the URL
+    fetch(`${movieUrl}/${id}`, settingsGet) // Fetch the data for the specific movie
       .then((response) => {
         if (!response.ok) {
           // Check if response was successful
@@ -119,6 +144,7 @@ async function renderPage(response, page) {
   }
 }
 
+
 // REVIEW FORM - DONT REMOVE ----------------------------
 app.post("/movies/:movieId/review", (request, response) => {
   const id = request.body.id;
@@ -163,31 +189,50 @@ app.post("/movies/:movieId/review", (request, response) => {
 });
 
 // REVIEW FORM - DONT REMOVE -------------------------------------------
-
-app.get("/", async (request, response) => {
-  renderPage(response, "index");
+// API route for index page
+app.get('/', async (request, response) => {
+  renderPage(response, 'index');
 });
 
-app.get("/about", async (request, response) => {
-  renderPage(response, "about");
+// API route for about page
+app.get('/about', async (request, response) => {
+  renderPage(response, 'about');
 });
 
-app.get("/contact", async (request, response) => {
-  renderPage(response, "contact");
+// API route for contact page
+app.get('/contact', async (request, response) => {
+  renderPage(response, 'contact');
 });
 
-app.get("/movies", async (request, response) => {
-  renderPage(response, "movies");
+// API route for all movies page
+app.get('/movies', async (request, response) => {
+  renderPage(response, 'movies');
 });
 
-app.get("/movie/:id", async function (request, response) {
+// API route for individual movie page
+app.get('/movie/:id', async function (request, response) {
   const id = request.params.id;
   renderPage(response, `/movie/${id}`);
 });
 
-app.use(express.static("static"));
 
-app.get("*", async function (request, response) {
+// API route for index page screenings
+app.get('/api/home/screenings', async (request, response) => {
+  homeScreening(response, `/api/screenings?populate=movie`);
+});
+// API route for individual movie page screenings (client-side fetching)
+app.get('/movie/:id/screenings', async (request, response) => {
+  const movieId = request.params.id;
+  moviePage(response, `/api/screenings?filters[movie]=${movieId}`);
+});
+
+app.get('/api/getTenScreenings', async (reqest, response) => {
+  const data = await getTenScreenings(getTenScreeningsAdapter);
+  response.status(200).json(data);
+});
+
+//The 404 Route (ALWAYS Keep this as the last route)
+app.get('*', async function (request, response) {
   response.status(404);
   renderPage(response, "404");
 });

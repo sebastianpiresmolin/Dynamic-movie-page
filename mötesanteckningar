@@ -1,5 +1,18 @@
+Uppstart 29-01-24
 Vi jobbar i sebastian repo.
 
 vi använder trello för att strukturera arbetet.
 
 vi ska hålla kontakt över discord och ha möten med jämna mellanrum
+
+Möte 02-01-24
+
+Vi ska använda /app/./endpoint som api format.
+
+Vi ska kontinuerligt fylla i API dokumentationen så att det är enkelt
+att se strukturen.
+
+Vi ska i första hand inte skriva funktioner inuti app.js.
+Istället så ska de importeras from ./src.
+Men om man redan skrivit sin kod inuti app.js så låter vi den vara tills efter
+merge.
