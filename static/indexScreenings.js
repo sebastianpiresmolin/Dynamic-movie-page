@@ -9,7 +9,6 @@ async function screening() {
 window.onload = async function () {
   if (window.location.pathname === '/') {
     const result = await screening();
-    console.log(result);
     for (let i = 0; i < result.length; i++) {
       let li = document.createElement('li');
       let a = document.createElement('a');
