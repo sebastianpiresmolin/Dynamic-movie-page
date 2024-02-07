@@ -7,6 +7,7 @@ import getTenScreeningsAdapter from './src/cmsAdapter.js';
 import getTenScreenings from './src/getTenScreenings.js';
 import moviePage from './src/moviePage.js';
 //import renderPage from './renderPage.js';
+import { builder } from "./buildReviewBody.js";
 
 // API URL's
 export const movieUrl =
@@ -18,6 +19,8 @@ export const settingsGet = { method: 'Get' };
 export const settingsPost = { method: 'Post' };
 
 const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Set up handlebars
 app.engine('handlebars', engine());
@@ -38,14 +41,14 @@ export const MENU = [
 export const images = [
   {
     index:
-      'https://static01.nyt.com/images/2023/12/12/climate/12cli-cats/12cli-cats-jumbo.jpg?quality=75&auto=webp',
+      "https://static01.nyt.com/images/2023/12/12/climate/12cli-cats/12cli-cats-jumbo.jpg?quality=75&auto=webp",
   },
   {
-    about: 'https://www.alleycat.org/wp-content/uploads/2019/03/FELV-cat.jpg',
+    about: "https://www.alleycat.org/wp-content/uploads/2019/03/FELV-cat.jpg",
   },
   {
     contact:
-      'https://static.scientificamerican.com/sciam/cache/file/32665E6F-8D90-4567-9769D59E11DB7F26_source.jpg?w=900',
+      "https://static.scientificamerican.com/sciam/cache/file/32665E6F-8D90-4567-9769D59E11DB7F26_source.jpg?w=900",
   },
 ];
 
@@ -82,16 +85,17 @@ async function renderPage(response, page) {
       .then((response) => {
         if (!response.ok) {
           // Check if response was successful
-          throw new Error('Network response was not ok'); // Throw an error if not
+          throw new Error("Network response was not ok"); // Throw an error if not
         }
         return response.json();
       })
       .then((json) => {
         if (!json.data) {
           // Check if data exists
-          throw new Error('No data found'); // Throw an error if not
+          throw new Error("No data found"); // Throw an error if not
         }
-        response.render('movie', {
+
+        response.render("movie", {
           // Render the 'movie' view
           movie: {
             id: json.data.id,
@@ -110,15 +114,15 @@ async function renderPage(response, page) {
       })
       .catch((error) => {
         // Catch any errors
-        console.error('Fetch Error:', error);
+        console.error("Fetch Error:", error);
         response.status(404);
-        renderPage(response, '404');
+        renderPage(response, "404");
       });
   } else {
-    const activePage = page === '/' ? index : page;
-    const currentPath = page == 'index' ? '/' : `/${page}`;
+    const activePage = page === "/" ? index : page;
+    const currentPath = page == "index" ? "/" : `/${page}`;
     const activeImage =
-      page === '/' ? 0 : page === 'about' ? 1 : page === 'contact' ? 2 : 0;
+      page === "/" ? 0 : page === "about" ? 1 : page === "contact" ? 2 : 0;
     const activeImageIndex = images[activeImage][activePage];
     response.render(page, {
       menuItems: MENU.map((item) => {
@@ -133,6 +137,51 @@ async function renderPage(response, page) {
   }
 }
 
+
+// REVIEW FORM - DONT REMOVE ----------------------------
+app.post("/movies/:movieId/review", (request, response) => {
+  const id = request.body.id;
+  const comment = request.body.comment;
+  const rating = request.body.rating;
+  const author = request.body.author;
+
+  const reviewAttributes = {
+    movie: id,
+    comment: comment,
+    rating: rating,
+    author: author,
+    createdBy: author,
+  };
+  console.log(reviewAttributes);
+
+  // Convert the JavaScript object to a JSON string
+  const jsonData = JSON.stringify(builder(reviewAttributes));
+  console.log(jsonData);
+  const fetchUrl = "https://plankton-app-xhkom.ondigitalocean.app/api/reviews";
+  fetch(fetchUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: jsonData,
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Failed to write data to database");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      // console.log("Data written to database:", data);
+      response.status(201).send("Data written to database");
+    })
+    .catch((error) => {
+      console.error("Error writing to database:", error.message);
+      response.status(500).send("Error writing to database");
+    });
+});
+
+// REVIEW FORM - DONT REMOVE -------------------------------------------
 // API route for index page
 app.get('/', async (request, response) => {
   renderPage(response, 'index');
@@ -159,11 +208,11 @@ app.get('/movie/:id', async function (request, response) {
   renderPage(response, `/movie/${id}`);
 });
 
+
 // API route for index page screenings
 app.get('/api/home/screenings', async (request, response) => {
   homeScreening(response, `/api/screenings?populate=movie`);
 });
-
 // API route for individual movie page screenings (client-side fetching)
 app.get('/movie/:id/screenings', async (request, response) => {
   const movieId = request.params.id;
@@ -178,7 +227,8 @@ app.get('/api/getTenScreenings', async (reqest, response) => {
 //The 404 Route (ALWAYS Keep this as the last route)
 app.get('*', async function (request, response) {
   response.status(404);
-  renderPage(response, '404');
+  renderPage(response, "404");
 });
+app.use(express.static("static"));
 
 export default app;
