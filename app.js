@@ -22,13 +22,6 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
-const MENU = [
-  { name: "Home", link: "/" },
-  { name: "About", link: "/about" },
-  { name: "Contact", link: "/contact" },
-  { name: "Movies", link: "/movies" },
-]
 // Set up handlebars
 app.engine('handlebars', engine());
 app.set('view engine', 'handlebars');
