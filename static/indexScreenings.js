@@ -8,23 +8,24 @@ async function screening() {
 
 window.onload = async function () {
   const result = await screening();
-  for (let i = 0; i < result.screenings.length; i++) {
+  console.log(result);
+  for (let i = 0; i < result.length; i++) {
     let li = document.createElement('li');
     let a = document.createElement('a');
-    a.href = `./movie/${result.screenings[i].movieId}`;
-    a.textContent = result.screenings[i].title;
+    a.href = `./movie/${result[i].movieId}`;
+    a.textContent = result[i].title;
 
     let img = document.createElement('img');
-    img.src = result.screenings[i].image;
+    img.src = result[i].image;
     img.classList.add('screening-image');
     a.appendChild(img);
 
     let room = document.createElement('p');
-    room.textContent = result.screenings[i].room;
+    room.textContent = result[i].room;
     room.classList.add('room');
 
     let date = document.createElement('p');
-    date.textContent = result.screenings[i].time;
+    date.textContent = result[i].time;
     date.classList.add('date');
 
     li.appendChild(a);

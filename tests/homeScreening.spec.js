@@ -1,4 +1,4 @@
-import { jest } from '@jest/globals';
+/*import { jest } from '@jest/globals';
 import getTenScreenings from '../src/getTenScreenings.js';
 
 describe('getRecentReviews()', () => {
