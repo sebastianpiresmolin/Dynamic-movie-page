@@ -2,9 +2,21 @@
   <h2>{{movie.title}}</h2>
   <img src='{{movie.image}}' alt='{{movie.title}}' />
   <md-block>{{movie.intro}}</md-block>
-  {{#if imdbRating}}
-    <p>IMDb Rating: {{imdbRating}}</p>
+  {{#if movie.averageRating}}
+    <p>Average Rating: {{movie.averageRating}}</p>
+  {{else if movie.imdbRating}}
+    <p>IMDb Rating: {{movie.imdbRating}}</p>
   {{else}}
-    <p>IMDb Rating: N/A</p>
+    <p>No rating available</p>
   {{/if}}
+  <div>
+    <h3>Leave a review on this movie </h3>
+    <form id="reviewForm" >
+      <input id="movieTitle" type="hidden" name="movieTitle" value="{{ movie.title }}">
+      <input id="name" name="name" type="text" placeholder="Name" />
+      <input id="comment" name="comment" type="text" placeholder="Leave comment" />
+      <input id="rating" name="rating" type="text" placeholder="Give rating 1-5" />
+      <button type="submit"> Submit</button>
+    </form>
+  </div>
 </div>

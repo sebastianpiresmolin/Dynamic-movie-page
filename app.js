@@ -36,6 +36,18 @@ const images = [
   },
 ];
 
+async function fetchReviews(movieId) {
+  const reviewsResponse = await fetch(`https://plankton-app-xhkom.ondigitalocean.app/api/reviews?filters[movie]=${movieId}`);
+  const reviewsJson = await reviewsResponse.json();
+  return reviewsJson.data.map(review => review.attributes.rating); // Extract ratings from reviews
+}
+
+function calculateAverageRating(ratings) {
+  if (ratings.length === 0) return 0;
+  const sum = ratings.reduce((total, rating) => total + rating, 0);
+  return (sum / ratings.length).toFixed(1);
+}
+
 async function renderPage(response, page) {
   const currentPath = page == 'index' ? '/' : `/${page}`;
   page === '/' ? 0 : page === 'about' ? 1 : page === 'contact' ? 2 : 0;
@@ -117,6 +129,48 @@ async function renderPage(response, page) {
   }
 }
 
+app.post("/movies/:movieId/review", (request, response) => {
+  const id = request.body.id;
+  const comment = request.body.comment;
+  const rating = request.body.rating;
+  const author = request.body.author;
+
+  const reviewAttributes = {
+    movie: id,
+    comment: comment,
+    rating: rating,
+    author: author,
+    createdBy: author,
+  };
+  console.log(reviewAttributes);
+
+  // Convert the JavaScript object to a JSON string
+  const jsonData = JSON.stringify(builder(reviewAttributes));
+  console.log(jsonData);
+  const fetchUrl = "https://plankton-app-xhkom.ondigitalocean.app/api/reviews";
+  fetch(fetchUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: jsonData,
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Failed to write data to database");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      // console.log("Data written to database:", data);
+      response.status(201).send("Data written to database");
+    })
+    .catch((error) => {
+      console.error("Error writing to database:", error.message);
+      response.status(500).send("Error writing to database");
+    });
+});
+
 app.get('/', async (request, response) => {
   renderPage(response, 'index');
 });
@@ -148,24 +202,22 @@ app.get('/movie/:id', async function (request, response) {
       if (!json.data) {
         throw new Error('No data found');
       }
-
-      const omdbUrl = `https://www.omdbapi.com/?apikey=${omdbApiKey}&t=${encodeURIComponent(json.data.attributes.title)}`;
-
+      const movie = json.data;
+      const reviews = await fetchReviews(movie.id);
+      const averageRating = calculateAverageRating(reviews);
+      const omdbUrl = `https://www.omdbapi.com/?apikey=${omdbApiKey}&t=${encodeURIComponent(movie.attributes.title)}`;
       const omdbResponse = await fetch(omdbUrl);
       const omdbJson = await omdbResponse.json();
-
-      //const localReviews = json.data.attributes.reviews;
-      //const averageRating = calculateAverageRating(localReviews);
-
       const imdbRating = omdbJson.imdbRating || 'N/A';
-
-
+      const displayImdbRating = reviews.length < 5;
       response.render('movie', {
         movie: {
-          id: json.data.id,
-          title: json.data.attributes.title,
-          intro: json.data.attributes.intro,
-          image: json.data.attributes.image.url,
+          id: movie.id,
+          title: movie.attributes.title,
+          intro: movie.attributes.intro,
+          image: movie.attributes.image.url,
+          averageRating: displayImdbRating ? null : averageRating,
+          imdbRating: displayImdbRating ? imdbRating : null,
         },
         menuItems: MENU.map((item) => {
           return {
@@ -174,7 +226,6 @@ app.get('/movie/:id', async function (request, response) {
             link: item.link,
           };
         }),
-        imdbRating: imdbRating,// rating: localReviews.length >= 5 ? averageRating : imdbRating, //
       });
     })
     .catch((error) => {
