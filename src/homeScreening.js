@@ -1,16 +1,18 @@
 // Function to get the screenings for the home page
-async function homeScreening(getTenScreeningsAdapter) {
+async function homeScreening(
+  getTenScreeningsAdapter,
+  currentDate = new Date()
+) {
   const screenings = await getTenScreeningsAdapter.loadAllMovieScreenings();
-
   const result = screenings
     .filter((screening) => {
       // Convert the start_time to a Date object
       const startTime = new Date(screening.attributes.start_time);
       // Get today's date
-      const today = new Date();
+      const today = new Date(currentDate);
       // Get the date for the upcoming five days
-      const fiveDays = new Date();
-      fiveDays.setDate(fiveDays.getDate() + 5);
+      const fiveDays = new Date(currentDate);
+      fiveDays.setDate(today.getDate() + 5);
       // Remove the time from today's date
       today.setHours(0, 0, 0, 0);
       // Return true if the start_time is not earlier than today's date and not later than five days from today
