@@ -7,6 +7,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const url = 'https://plankton-app-xhkom.ondigitalocean.app/api/movies';
+const reviewUrl = 'https://plankton-app-xhkom.ondigitalocean.app/api/reviews';
 const omdbApiKey = process.env.OMDB_API_KEY;
 const settings = { method: 'Get' };
 
@@ -27,11 +28,19 @@ async function fetchOmdbRating(title) {
     return omdbJson.imdbRating;
 }
 
+// Fetch review ratings for a specific movie
+async function fetchReviewRatings(movieId) {
+    const response = await fetch(`${reviewUrl}?filters[movie]=${movieId}`);
+    const json = await response.json();
+    return json.data.map(review => review.attributes.rating);
+}
+
 test.each(movies.map((movie) => [movie.attributes.title]))(
-    "page displays correct IMDb rating for %s",
+    "page displays correct IMDb rating and review rating for %s",
     async (title) => {
         try {
             const omdbRating = await fetchOmdbRating(title);
+            const reviewRatings = await fetchReviewRatings(title);
 
             const responseFromApp = await request(app)
                 .get(`/movie/${title}`)
@@ -49,6 +58,15 @@ test.each(movies.map((movie) => [movie.attributes.title]))(
             } else {
                 expect(imdbRatingFromPage).toBe(omdbRating);
             }
+
+            // Extract review rating from the HTML content
+            const reviewRatingFromPage = responseFromApp.text.match(/<p>Review Rating: ([\d.]+)<\/p>/)[1];
+
+            // Calculate average review rating
+            const averageReviewRating = reviewRatings.reduce((total, rating) => total + rating, 0) / reviewRatings.length;
+
+            // Check if the review rating displayed on the page matches the average review rating
+            expect(parseFloat(reviewRatingFromPage)).toBeCloseTo(averageReviewRating);
         } catch (error) {
             // Handle errors appropriately
             console.error(error.message);
