@@ -110,11 +110,6 @@ footer li {
   background-color: black;
 }
 
-.allMovies {
-  display: flex;
-  flex-direction: column;
-}
-
 .main {
   display: flex;
   flex-direction: column;
@@ -126,7 +121,7 @@ footer li {
   text-align: center;
 }
 
-.allMovies {
+.allMovies, .screeningList {
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
@@ -140,7 +135,7 @@ footer li {
   margin: auto;
   margin-bottom: 20px;
 }
-.allMovies img {
+.allMovies img, .screeningList img {
   width: 20vw;
   max-width: 250px;
   height: 30vw;
@@ -148,11 +143,11 @@ footer li {
   margin: 10px;
   border-style: solid;
 }
-.allMovies a {
+.allMovies a, .screeningList a {
   text-decoration: none;
   color: black;
 }
-.allMovies a:hover {
+.allMovies a:hover, .screeningList a:hover {
   cursor: pointer;
 }
 
@@ -187,10 +182,38 @@ footer li {
   margin-top: 5px;
 }
 
-li.movies {
+li.movies, li.screening {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
   justify-content: center;
-}/*# sourceMappingURL=main.css.map */
+}
+
+.screeningImage {
+  width: 20vw;
+}
+
+.screeningList a {
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+  color: white;
+}
+
+li.screening {
+  border-style: solid;
+  border-radius: 5px;
+  margin: 10px;
+  background-color: rgb(124, 5, 5);
+  color: white;
+}
+
+p.date, p.room {
+  margin-bottom: 5px;
+  margin-top: 0px;
+  padding: 0;
+}
+
+/*# sourceMappingURL=main.css.map */
+

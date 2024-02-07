@@ -1,3 +1,4 @@
+// Imports
 import express from 'express';
 import { engine } from 'express-handlebars';
 import fetch from 'node-fetch';
@@ -9,30 +10,53 @@ const url = 'https://plankton-app-xhkom.ondigitalocean.app/api/movies';
 const omdbApiKey = process.env.OMDB_API_KEY;
 const settings = { method: 'Get' };
 
-const app = express();
+import homeScreening from './src/homeScreening.js';
+import getTenScreeningsAdapter from './src/cmsAdapter.js';
+import getTenScreenings from './src/getTenScreenings.js';
+import moviePage from './src/moviePage.js';
+//import renderPage from './renderPage.js';
+import { builder } from "./buildReviewBody.js";
 
+// API URL's
+export const movieUrl =
+  'https://plankton-app-xhkom.ondigitalocean.app/api/movies';
+export const APIurl = 'https://plankton-app-xhkom.ondigitalocean.app';
+
+// fetch settings
+export const settingsGet = { method: 'Get' };
+export const settingsPost = { method: 'Post' };
+
+const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Set up handlebars
 app.engine('handlebars', engine());
 app.set('view engine', 'handlebars');
 app.set('views', './templates');
 
-const MENU = [
+app.use(express.static('static'));
+
+// Navbar menu items
+export const MENU = [
   { name: 'Home', link: '/' },
+  { name: 'Movies', link: '/movies' },
   { name: 'About', link: '/about' },
   { name: 'Contact', link: '/contact' },
-  { name: 'Movies', link: '/movies' },
 ];
 
-const images = [
+// Images for index, about and contact page
+export const images = [
   {
     index:
-      'https://static01.nyt.com/images/2023/12/12/climate/12cli-cats/12cli-cats-jumbo.jpg?quality=75&auto=webp',
+      "https://static01.nyt.com/images/2023/12/12/climate/12cli-cats/12cli-cats-jumbo.jpg?quality=75&auto=webp",
   },
   {
-    about: 'https://www.alleycat.org/wp-content/uploads/2019/03/FELV-cat.jpg',
+    about: "https://www.alleycat.org/wp-content/uploads/2019/03/FELV-cat.jpg",
   },
   {
     contact:
-      'https://static.scientificamerican.com/sciam/cache/file/32665E6F-8D90-4567-9769D59E11DB7F26_source.jpg?w=900',
+      "https://static.scientificamerican.com/sciam/cache/file/32665E6F-8D90-4567-9769D59E11DB7F26_source.jpg?w=900",
   },
 ];
 
@@ -49,11 +73,12 @@ function calculateAverageRating(ratings) {
 }
 
 async function renderPage(response, page) {
+  //Check to see if current page is index and also check which page is active so that I know which image to serve.
   const currentPath = page == 'index' ? '/' : `/${page}`;
   page === '/' ? 0 : page === 'about' ? 1 : page === 'contact' ? 2 : 0;
 
   if (page === 'movies') {
-    fetch(url, settings)
+    fetch(movieUrl, settingsGet)
       .then((response) => response.json())
       .then((json) => {
         response.render(page, {
@@ -90,6 +115,7 @@ async function renderPage(response, page) {
         }
         response.render('movie', {
 
+
           movie: {
             id: json.data.id,
             title: json.data.attributes.title,
@@ -108,13 +134,13 @@ async function renderPage(response, page) {
       .catch((error) => {
         console.error('Fetch Error:', error);
         response.status(404);
-        renderPage(response, '404');
+        renderPage(response, "404");
       });
   } else {
-    const activePage = page === '/' ? index : page;
-    const currentPath = page == 'index' ? '/' : `/${page}`;
+    const activePage = page === "/" ? index : page;
+    const currentPath = page == "index" ? "/" : `/${page}`;
     const activeImage =
-      page === '/' ? 0 : page === 'about' ? 1 : page === 'contact' ? 2 : 0;
+      page === "/" ? 0 : page === "about" ? 1 : page === "contact" ? 2 : 0;
     const activeImageIndex = images[activeImage][activePage];
     response.render(page, {
       menuItems: MENU.map((item) => {
@@ -129,6 +155,8 @@ async function renderPage(response, page) {
   }
 }
 
+
+// REVIEW FORM - DONT REMOVE ----------------------------
 app.post("/movies/:movieId/review", (request, response) => {
   const id = request.body.id;
   const comment = request.body.comment;
@@ -171,22 +199,30 @@ app.post("/movies/:movieId/review", (request, response) => {
     });
 });
 
+
+// REVIEW FORM - DONT REMOVE -------------------------------------------
+// API route for index page
+
 app.get('/', async (request, response) => {
   renderPage(response, 'index');
 });
 
+// API route for about page
 app.get('/about', async (request, response) => {
   renderPage(response, 'about');
 });
 
+// API route for contact page
 app.get('/contact', async (request, response) => {
   renderPage(response, 'contact');
 });
 
+// API route for all movies page
 app.get('/movies', async (request, response) => {
   renderPage(response, 'movies', true);
 });
 
+// API route for individual movie page
 app.get('/movie/:id', async function (request, response) {
   const id = request.params.id;
   const currentPath = `/${id}`;
@@ -235,16 +271,34 @@ app.get('/movie/:id', async function (request, response) {
     });
 });
 
+
 // function calculateAverageRating(reviews) {
 //  const sum = reviews.reduce((total, review) => total + review.rating, 0);
 //  return (sum / reviews.length).toFixed(1);
 //}
 
-app.use(express.static('static'));
 
+
+// API route for index page screenings
+app.get('/api/home/screenings', async (request, response) => {
+  homeScreening(response, `/api/screenings?populate=movie`);
+});
+// API route for individual movie page screenings (client-side fetching)
+app.get('/movie/:id/screenings', async (request, response) => {
+  const movieId = request.params.id;
+  moviePage(response, `/api/screenings?filters[movie]=${movieId}`);
+});
+
+app.get('/api/getTenScreenings', async (reqest, response) => {
+  const data = await getTenScreenings(getTenScreeningsAdapter);
+  response.status(200).json(data);
+});
+
+//The 404 Route (ALWAYS Keep this as the last route)
 app.get('*', async function (request, response) {
   response.status(404);
-  renderPage(response, '404');
+  renderPage(response, "404");
 });
+app.use(express.static("static"));
 
 export default app;
