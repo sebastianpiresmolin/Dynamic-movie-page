@@ -11,9 +11,9 @@ const omdbApiKey = process.env.OMDB_API_KEY;
 const settings = { method: 'Get' };
 
 import homeScreening from './src/homeScreening.js';
-import getTenScreeningsAdapter from './src/cmsAdapter.js';
+import { getTenScreeningsAdapter } from './src/cmsAdapter.js';
 import moviePage from './src/moviePage.js';
-import cmsAdapter from './src/cmsAdapterMoviePage.js';
+import { cmsAdapter } from './src/cmsAdapter.js';
 //import renderPage from './renderPage.js';
 import { builder } from './buildReviewBody.js';
 
@@ -278,6 +278,7 @@ app.get('/api/home/screenings', async (request, response) => {
   const screenings = await homeScreening(getTenScreeningsAdapter);
   response.json(screenings);
 });
+
 // API route for individual movie page screenings (client-side fetching)
 app.get('/movie/:id/screenings', async (request, response) => {
   const movieId = request.params.id;
