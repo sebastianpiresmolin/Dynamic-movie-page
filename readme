@@ -106,3 +106,18 @@ CODE 200 OK
     }
 }
 
+----------------------------------------
+movieScreenings
+----------------------------------------
+GET /movie/:id/screenings
+
+Example response: 
+
+CODE: 200 OK
+
+{
+    "screenings":[
+        {"id":225,"time":"2024-02-09 21:00","room":"Stora salongen"}
+    ]
+}
+
