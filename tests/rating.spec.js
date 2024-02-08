@@ -27,7 +27,7 @@ describe('OMDB API Test Suite', () => {
         for (const movieTitle of movieTitles) {
             const movieData = await fetchMovieDataFromOMDB(movieTitle);
 
-            console.log(`Movie Data for "${movieTitle}":`, movieData);
+            console.log(`Movie Data for "${movieTitle}":`, movieData.imdbRating);
 
             if (movieData.Response === 'False') {
                 console.log(`Skipping expectations for "${movieTitle}" because it was not found on IMDb.`);
