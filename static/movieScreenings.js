@@ -15,9 +15,6 @@ function getMovieId() {
 function updateScreenings(data) {
   const screeningsContainer = document.getElementById("screeningsContainer");
 
-  // Clear previous content (OBS! is this nessesary?)
-  screeningsContainer.innerHTML = "";
-
   // Check if the 'screenings' property is present and is an array
   if (data && data.screenings && Array.isArray(data.screenings)) {
     // Create and append new content
@@ -31,8 +28,7 @@ function updateScreenings(data) {
 
     screeningsContainer.appendChild(screeningsList);
   } else {
-    // Handle the case where the data structure is not as expected
-    console.error("Invalid data format:", data);
+    // Handle the case where the data is not as expected
     screeningsContainer.textContent = "Error: Invalid data format";
   }
 }
@@ -46,12 +42,11 @@ window.addEventListener("popstate", function () {
     fetch(`/movie/${changedMovieId}/screenings`)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         // Update HTML with changed data
         updateScreenings(data);
       })
       .catch((error) => {
-        console.error("Error fetching screenings:", error);
+        //console.error("Error fetching screenings:", error);
       });
   }
 });
@@ -64,11 +59,10 @@ if (movieId) {
   fetch(`/movie/${movieId}/screenings`)
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
       // Update HTML with initial data
       updateScreenings(data);
     })
     .catch((error) => {
-      console.error("Error fetching screenings:", error);
+      //console.error("Error fetching screenings:", error);
     });
 }
