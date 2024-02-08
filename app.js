@@ -2,6 +2,14 @@
 import express from 'express';
 import { engine } from 'express-handlebars';
 import fetch from 'node-fetch';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+const url = 'https://plankton-app-xhkom.ondigitalocean.app/api/movies';
+const omdbApiKey = process.env.OMDB_API_KEY;
+const settings = { method: 'Get' };
+
 import homeScreening from './src/homeScreening.js';
 import getTenScreeningsAdapter from './src/cmsAdapter.js';
 import moviePage from './src/moviePage.js';
@@ -51,6 +59,18 @@ export const images = [
   },
 ];
 
+async function fetchReviews(movieId) {
+  const reviewsResponse = await fetch(`https://plankton-app-xhkom.ondigitalocean.app/api/reviews?filters[movie]=${movieId}`);
+  const reviewsJson = await reviewsResponse.json();
+  return reviewsJson.data.map(review => review.attributes.rating); // Extract ratings from reviews
+}
+
+function calculateAverageRating(ratings) {
+  if (ratings.length === 0) return 0;
+  const sum = ratings.reduce((total, rating) => total + rating, 0);
+  return (sum / ratings.length).toFixed(1);
+}
+
 async function renderPage(response, page) {
   //Check to see if current page is index and also check which page is active so that I know which image to serve.
   const currentPath = page == 'index' ? '/' : `/${page}`;
@@ -67,6 +87,7 @@ async function renderPage(response, page) {
               title: movies.attributes.title,
               intro: movies.attributes.intro,
               image: movies.attributes.image.url,
+              imdbRating: movies.imdbRating,
             };
           }),
           menuItems: MENU.map((item) => {
@@ -79,10 +100,11 @@ async function renderPage(response, page) {
         });
       });
   } else if (page.startsWith('/movie/')) {
-    const id = page.split('/')[2]; // Get the id from the URL
-    fetch(`${movieUrl}/${id}`, settingsGet) // Fetch the data for the specific movie
+    const id = page.split('/')[2];
+    fetch(`${url}/${id}`, settings) 
       .then((response) => {
         if (!response.ok) {
+          throw new Error('Network response was not ok');
           // Check if response was successful
           throw new Error('Network response was not ok'); // Throw an error if not
         }
@@ -90,10 +112,10 @@ async function renderPage(response, page) {
       })
       .then((json) => {
         if (!json.data) {
+          throw new Error('No data found');
           // Check if data exists
           throw new Error('No data found'); // Throw an error if not
         }
-
         response.render('movie', {
           // Render the 'movie' view
           movie: {
@@ -112,7 +134,6 @@ async function renderPage(response, page) {
         });
       })
       .catch((error) => {
-        // Catch any errors
         console.error('Fetch Error:', error);
         response.status(404);
         renderPage(response, '404');
@@ -179,8 +200,6 @@ app.post('/movies/:movieId/review', (request, response) => {
     });
 });
 
-// REVIEW FORM - DONT REMOVE -------------------------------------------
-// API route for index page
 app.get('/', async (request, response) => {
   renderPage(response, 'index');
 });
@@ -197,14 +216,61 @@ app.get('/contact', async (request, response) => {
 
 // API route for all movies page
 app.get('/movies', async (request, response) => {
-  renderPage(response, 'movies');
+  renderPage(response, 'movies', true);
 });
 
 // API route for individual movie page
 app.get('/movie/:id', async function (request, response) {
   const id = request.params.id;
-  renderPage(response, `/movie/${id}`);
+  const currentPath = `/${id}`;
+  
+  fetch(`${url}/${id}`, settings)
+    .then(async (response) => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(async (json) => {
+      if (!json.data) {
+        throw new Error('No data found');
+      }
+      const movie = json.data;
+      const reviews = await fetchReviews(movie.id);
+      const averageRating = calculateAverageRating(reviews);
+      const omdbUrl = `https://www.omdbapi.com/?apikey=${omdbApiKey}&t=${encodeURIComponent(movie.attributes.title)}`;
+      const omdbResponse = await fetch(omdbUrl);
+      const omdbJson = await omdbResponse.json();
+      const imdbRating = omdbJson.imdbRating || 'N/A';
+      const displayImdbRating = reviews.length < 5;
+      response.render('movie', {
+        movie: {
+          id: movie.id,
+          title: movie.attributes.title,
+          intro: movie.attributes.intro,
+          image: movie.attributes.image.url,
+          averageRating: displayImdbRating ? null : averageRating,
+          imdbRating: displayImdbRating ? imdbRating : null,
+        },
+        menuItems: MENU.map((item) => {
+          return {
+            active: currentPath == item.link,
+            name: item.name,
+            link: item.link,
+          };
+        }),
+      });
+    })
+    .catch((error) => {
+      console.error('Fetch Error:', error);
+      response.status(404);
+      renderPage(response, '404');
+    });
 });
+// function calculateAverageRating(reviews) {
+//  const sum = reviews.reduce((total, review) => total + review.rating, 0);
+//  return (sum / reviews.length).toFixed(1);
+//}
 
 // API route for index page screenings
 app.get('/api/home/screenings', async (request, response) => {

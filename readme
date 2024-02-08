@@ -4,6 +4,7 @@ npm test - Run test suites
 npm run test:watch - Run tests every save
 npm run build - Compile sass
 
+
 API DOCUMENTATION
 
 Server: https://localhost:5080/api
@@ -30,6 +31,54 @@ CODE: 200 OK
     ]
 }
 
+Omdbapi
+----------------------------
+GET "https://www.omdbapi.com/?apikey=YOUR_API_KEY&t=MOVIE_TITLE"
+
+Example response: 
+
+CODE: 200 OK
+{
+    "Title": "Pulp Fiction",
+    "Year": "1994",
+    "Rated": "R",
+    "Released": "14 Oct 1994",
+    "Runtime": "154 min",
+    "Genre": "Crime, Drama",
+    "Director": "Quentin Tarantino",
+    "Writer": "Quentin Tarantino, Roger Avary",
+    "Actors": "John Travolta, Uma Thurman, Samuel L. Jackson",
+    "Plot": "The lives of two mob hitmen, a boxer, a gangster and his wife, and a pair of diner bandits intertwine in four tales of violence and redemption.",
+    "Language": "English, Spanish, French",
+    "Country": "United States",
+    "Awards": "Won 1 Oscar. 69 wins & 72 nominations total",
+    "Poster": "https://m.media-amazon.com/images/M/MV5BNGNhMDIzZTUtNTBlZi00MTRlLWFjM2ItYzViMjE3YzI5MjljXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_SX300.jpg",
+    "Ratings": [
+        {
+            "Source": "Internet Movie Database",
+            "Value": "8.9/10"
+        },
+        {
+            "Source": "Rotten Tomatoes",
+            "Value": "92%"
+        },
+        {
+            "Source": "Metacritic",
+            "Value": "95/100"
+        }
+    ],
+    "Metascore": "95",
+    "imdbRating": "8.9",
+    "imdbVotes": "2,179,429",
+    "imdbID": "tt0110912",
+    "Type": "movie",
+    "DVD": "21 Apr 2016",
+    "BoxOffice": "$107,928,762",
+    "Production": "N/A",
+    "Website": "N/A",
+    "Response": "True"
+}
+
 ----------------------------------------
 REVIEWS
 ----------------------------------------
@@ -50,4 +99,4 @@ CODE 200 OK
         "updatedAt":"2024-02-07T21:05:27.230Z",
     }
 }
-----------------------------------------
+
