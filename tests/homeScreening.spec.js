@@ -1,6 +1,10 @@
 import { jest } from '@jest/globals';
 import homeScreening from '../src/homeScreening.js';
 
+beforeEach(() => {
+  jest.useFakeTimers();
+});
+
 test('Only show screenings for the next five days', async () => {
   const mockedDate = new Date('2024-02-02T13:37:00.000Z');
   jest.setSystemTime(mockedDate);
