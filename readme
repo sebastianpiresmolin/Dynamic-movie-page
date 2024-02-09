@@ -93,18 +93,19 @@ GET /api/movies/:movieId/review
 Example response:
 
 CODE 200 OK
-}
-    }
+{
+    {
         "id":477,
         "attributes":
-        {"comment":"TEST",
-        "rating":4,
-        "author":"Mikaelaärbäst",
-        "verified":true,
-        "createdAt":"2024-02-07T21:05:27.230Z",
-        "updatedAt":"2024-02-07T21:05:27.230Z",
+            {"comment":"TEST",
+            "rating":4,
+            "author":"Mikaelaärbäst",
+            "verified":true,
+            "createdAt":"2024-02-07T21:05:27.230Z",
+            "updatedAt":"2024-02-07T21:05:27.230Z",
+            }
     }
-}
+]
 
 ----------------------------------------
 movieScreenings
