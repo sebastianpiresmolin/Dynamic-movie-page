@@ -1,11 +1,23 @@
 const getTenScreeningsAdapter = {
   async loadAllMovieScreenings() {
     const response = await fetch(
-      'https://plankton-app-xhkom.ondigitalocean.app/api/screenings?populate=movie'
+      "https://plankton-app-xhkom.ondigitalocean.app/api/screenings?populate=movie"
     );
     const payload = await response.json();
     return payload.data;
   },
 };
 
-export default getTenScreeningsAdapter;
+export { getTenScreeningsAdapter };
+
+const cmsAdapter = {
+  async loadScreenings(queryString) {
+    const response = await fetch(
+      `https://plankton-app-xhkom.ondigitalocean.app/api/screenings${queryString}`
+    );
+    const payload = await response.json();
+    return payload.data;
+  },
+};
+
+export { cmsAdapter };
