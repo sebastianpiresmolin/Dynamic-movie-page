@@ -3,6 +3,10 @@
 import { jest } from '@jest/globals';
 import moviePage from '../src/moviePage.js';
 
+// Mock the current date to a specific value
+const mockedDate = new Date('2024-02-07T12:00:00Z');
+jest.useFakeTimers('modern').setSystemTime(mockedDate.getTime());
+
 const cmsAdapter = {
   async loadScreenings() {
     // Mock data: Past and future screenings
