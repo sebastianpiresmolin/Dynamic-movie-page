@@ -1,7 +1,7 @@
 const getTenScreeningsAdapter = {
   async loadAllMovieScreenings() {
     const response = await fetch(
-      "https://plankton-app-xhkom.ondigitalocean.app/api/screenings?populate=movie"
+      "https://plankton-app-xhkom.ondigitalocean.app/api/screenings?pagination%5Blimit%5D=1000&populate=movie"
     );
     const payload = await response.json();
     return payload.data;
