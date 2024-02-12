@@ -282,7 +282,7 @@ app.get('/api/home/screenings', async (request, response) => {
 // API route for individual movie page screenings (client-side fetching)
 app.get('/movie/:id/screenings', async (request, response) => {
   const movieId = request.params.id;
-  const queryString = `?filters[movie]=${movieId}`;
+  const queryString = `?pagination%5Blimit%5D=100&filters[movie]=${movieId}`;
   moviePage(response, cmsAdapter, queryString);
 });
 
