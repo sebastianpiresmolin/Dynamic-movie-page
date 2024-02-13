@@ -1,69 +1,71 @@
 // Imports
-import express from 'express';
-import { engine } from 'express-handlebars';
-import fetch from 'node-fetch';
-import dotenv from 'dotenv';
+import express from "express";
+import { engine } from "express-handlebars";
+import fetch from "node-fetch";
+import dotenv from "dotenv";
 
 dotenv.config();
 
-const url = 'https://plankton-app-xhkom.ondigitalocean.app/api/movies';
+const url = "https://plankton-app-xhkom.ondigitalocean.app/api/movies";
 const omdbApiKey = process.env.OMDB_API_KEY;
-const settings = { method: 'Get' };
+const settings = { method: "Get" };
 
-import homeScreening from './src/homeScreening.js';
-import { getTenScreeningsAdapter } from './src/cmsAdapter.js';
-import moviePage from './src/moviePage.js';
-import { cmsAdapter } from './src/cmsAdapter.js';
+import homeScreening from "./src/homeScreening.js";
+import { getTenScreeningsAdapter } from "./src/cmsAdapter.js";
+import moviePage from "./src/moviePage.js";
+import { cmsAdapter } from "./src/cmsAdapter.js";
 //import renderPage from './renderPage.js';
-import { builder } from './buildReviewBody.js';
+import { builder } from "./buildReviewBody.js";
 
 // API URL's
 export const movieUrl =
-  'https://plankton-app-xhkom.ondigitalocean.app/api/movies';
-export const APIurl = 'https://plankton-app-xhkom.ondigitalocean.app';
+  "https://plankton-app-xhkom.ondigitalocean.app/api/movies";
+export const APIurl = "https://plankton-app-xhkom.ondigitalocean.app";
 
 // fetch settings
-export const settingsGet = { method: 'Get' };
-export const settingsPost = { method: 'Post' };
+export const settingsGet = { method: "Get" };
+export const settingsPost = { method: "Post" };
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Set up handlebars
-app.engine('handlebars', engine());
-app.set('view engine', 'handlebars');
-app.set('views', './templates');
+app.engine("handlebars", engine());
+app.set("view engine", "handlebars");
+app.set("views", "./templates");
 
-app.use(express.static('static'));
+app.use(express.static("static"));
 
 // Navbar menu items
 export const MENU = [
-  { name: 'Home', link: '/' },
-  { name: 'Movies', link: '/movies' },
-  { name: 'About', link: '/about' },
-  { name: 'Contact', link: '/contact' },
+  { name: "Home", link: "/" },
+  { name: "Movies", link: "/movies" },
+  { name: "About", link: "/about" },
+  { name: "Contact", link: "/contact" },
 ];
 
 // Images for index, about and contact page
 export const images = [
   {
     index:
-      'https://static01.nyt.com/images/2023/12/12/climate/12cli-cats/12cli-cats-jumbo.jpg?quality=75&auto=webp',
+      "https://static01.nyt.com/images/2023/12/12/climate/12cli-cats/12cli-cats-jumbo.jpg?quality=75&auto=webp",
   },
   {
-    about: 'https://www.alleycat.org/wp-content/uploads/2019/03/FELV-cat.jpg',
+    about: "https://www.alleycat.org/wp-content/uploads/2019/03/FELV-cat.jpg",
   },
   {
     contact:
-      'https://static.scientificamerican.com/sciam/cache/file/32665E6F-8D90-4567-9769D59E11DB7F26_source.jpg?w=900',
+      "https://static.scientificamerican.com/sciam/cache/file/32665E6F-8D90-4567-9769D59E11DB7F26_source.jpg?w=900",
   },
 ];
 
 async function fetchReviews(movieId) {
-  const reviewsResponse = await fetch(`https://plankton-app-xhkom.ondigitalocean.app/api/reviews?filters[movie]=${movieId}`);
+  const reviewsResponse = await fetch(
+    `https://plankton-app-xhkom.ondigitalocean.app/api/reviews?filters[movie]=${movieId}`
+  );
   const reviewsJson = await reviewsResponse.json();
-  return reviewsJson.data.map(review => review.attributes.rating); // Extract ratings from reviews
+  return reviewsJson.data.map((review) => review.attributes.rating); // Extract ratings from reviews
 }
 
 function calculateAverageRating(ratings) {
@@ -74,10 +76,10 @@ function calculateAverageRating(ratings) {
 
 async function renderPage(response, page) {
   //Check to see if current page is index and also check which page is active so that I know which image to serve.
-  const currentPath = page == 'index' ? '/' : `/${page}`;
-  page === '/' ? 0 : page === 'about' ? 1 : page === 'contact' ? 2 : 0;
+  const currentPath = page == "index" ? "/" : `/${page}`;
+  page === "/" ? 0 : page === "about" ? 1 : page === "contact" ? 2 : 0;
 
-  if (page === 'movies') {
+  if (page === "movies") {
     fetch(movieUrl, settingsGet)
       .then((response) => response.json())
       .then((json) => {
@@ -100,24 +102,24 @@ async function renderPage(response, page) {
           }),
         });
       });
-  } else if (page.startsWith('/movie/')) {
-    const id = page.split('/')[2];
-    fetch(`${url}/${id}`, settings) 
+  } else if (page.startsWith("/movie/")) {
+    const id = page.split("/")[2];
+    fetch(`${url}/${id}`, settings)
       .then((response) => {
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          throw new Error("Network response was not ok");
           // Check if response was successful
-          throw new Error('Network response was not ok'); // Throw an error if not
+          throw new Error("Network response was not ok"); // Throw an error if not
         }
         return response.json();
       })
       .then((json) => {
         if (!json.data) {
-          throw new Error('No data found');
+          throw new Error("No data found");
           // Check if data exists
-          throw new Error('No data found'); // Throw an error if not
+          throw new Error("No data found"); // Throw an error if not
         }
-        response.render('movie', {
+        response.render("movie", {
           // Render the 'movie' view
           movie: {
             id: json.data.id,
@@ -135,15 +137,15 @@ async function renderPage(response, page) {
         });
       })
       .catch((error) => {
-        console.error('Fetch Error:', error);
+        console.error("Fetch Error:", error);
         response.status(404);
-        renderPage(response, '404');
+        renderPage(response, "404");
       });
   } else {
-    const activePage = page === '/' ? index : page;
-    const currentPath = page == 'index' ? '/' : `/${page}`;
+    const activePage = page === "/" ? index : page;
+    const currentPath = page == "index" ? "/" : `/${page}`;
     const activeImage =
-      page === '/' ? 0 : page === 'about' ? 1 : page === 'contact' ? 2 : 0;
+      page === "/" ? 0 : page === "about" ? 1 : page === "contact" ? 2 : 0;
     const activeImageIndex = images[activeImage][activePage];
     response.render(page, {
       menuItems: MENU.map((item) => {
@@ -159,7 +161,7 @@ async function renderPage(response, page) {
 }
 
 // REVIEW FORM - DONT REMOVE ----------------------------
-app.post('/movies/:movieId/review', (request, response) => {
+app.post("/movies/:movieId/review", (request, response) => {
   const id = request.body.id;
   const comment = request.body.comment;
   const rating = request.body.rating;
@@ -177,74 +179,119 @@ app.post('/movies/:movieId/review', (request, response) => {
   // Convert the JavaScript object to a JSON string
   const jsonData = JSON.stringify(builder(reviewAttributes));
   console.log(jsonData);
-  const fetchUrl = 'https://plankton-app-xhkom.ondigitalocean.app/api/reviews';
+  const fetchUrl = "https://plankton-app-xhkom.ondigitalocean.app/api/reviews";
   fetch(fetchUrl, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: jsonData,
   })
     .then((response) => {
       if (!response.ok) {
-        throw new Error('Failed to write data to database');
+        throw new Error("Failed to write data to database");
       }
       return response.json();
     })
     .then((data) => {
       // console.log("Data written to database:", data);
-      response.status(201).send('Data written to database');
+      response.status(201).send("Data written to database");
     })
     .catch((error) => {
-      console.error('Error writing to database:', error.message);
-      response.status(500).send('Error writing to database');
+      console.error("Error writing to database:", error.message);
+      response.status(500).send("Error writing to database");
     });
 });
 
-app.get('/', async (request, response) => {
-  renderPage(response, 'index');
+//--------------------------------------------------
+
+app.post("/signUp", (request, response) => {
+  const name = request.body.username;
+  const email = request.body.email;
+  const password = request.body.password;
+
+  const newUser = {
+    fullName: name,
+    email: email,
+    password: password,
+  };
+  console.log(newUser);
+
+  // Convert the JavaScript object to a JSON string
+  const jsonData = JSON.stringify(builder(newUser));
+  console.log(jsonData);
+  const fetchUrl = "//login"; //Add api url here to get signup data
+  fetch(fetchUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: jsonData,
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Failed to write data to database");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      // console.log("Data written to database:", data);
+      response.status(201).send("Data written to database");
+    })
+    .catch((error) => {
+      console.error("Error writing to database:", error.message);
+      response.status(500).send("Error writing to database");
+    });
+});
+
+//----------------------------------------------------
+
+app.get("/", async (request, response) => {
+  renderPage(response, "index");
 });
 
 // API route for about page
-app.get('/about', async (request, response) => {
-  renderPage(response, 'about');
+app.get("/about", async (request, response) => {
+  renderPage(response, "about");
 });
 
 // API route for contact page
-app.get('/contact', async (request, response) => {
-  renderPage(response, 'contact');
+app.get("/contact", async (request, response) => {
+  renderPage(response, "contact");
 });
 
 // API route for all movies page
-app.get('/movies', async (request, response) => {
-  renderPage(response, 'movies', true);
+app.get("/movies", async (request, response) => {
+  renderPage(response, "movies", true);
 });
 
 // API route for individual movie page
-app.get('/movie/:id', async function (request, response) {
+app.get("/movie/:id", async function (request, response) {
   const id = request.params.id;
   const currentPath = `/${id}`;
-  
+
   fetch(`${url}/${id}`, settings)
     .then(async (response) => {
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error("Network response was not ok");
       }
       return response.json();
     })
     .then(async (json) => {
       if (!json.data) {
-        throw new Error('No data found');
+        throw new Error("No data found");
       }
       const movie = json.data;
       const reviews = await fetchReviews(movie.id);
       const averageRating = calculateAverageRating(reviews);
-      const omdbUrl = `https://www.omdbapi.com/?apikey=${omdbApiKey}&t=${encodeURIComponent(movie.attributes.title)}`;
+      const omdbUrl = `https://www.omdbapi.com/?apikey=${omdbApiKey}&t=${encodeURIComponent(
+        movie.attributes.title
+      )}`;
       const omdbResponse = await fetch(omdbUrl);
       const omdbJson = await omdbResponse.json();
-      const imdbRating = omdbJson.imdbRating || 'N/A';
+      const imdbRating = omdbJson.imdbRating || "N/A";
       const displayImdbRating = reviews.length < 5;
-      response.render('movie', {
+      response.render("movie", {
         movie: {
           id: movie.id,
           title: movie.attributes.title,
@@ -263,9 +310,9 @@ app.get('/movie/:id', async function (request, response) {
       });
     })
     .catch((error) => {
-      console.error('Fetch Error:', error);
+      console.error("Fetch Error:", error);
       response.status(404);
-      renderPage(response, '404');
+      renderPage(response, "404");
     });
 });
 // function calculateAverageRating(reviews) {
@@ -274,23 +321,23 @@ app.get('/movie/:id', async function (request, response) {
 //}
 
 // API route for index page screenings
-app.get('/api/home/screenings', async (request, response) => {
+app.get("/api/home/screenings", async (request, response) => {
   const screenings = await homeScreening(getTenScreeningsAdapter);
   response.json(screenings);
 });
 
 // API route for individual movie page screenings (client-side fetching)
-app.get('/movie/:id/screenings', async (request, response) => {
+app.get("/movie/:id/screenings", async (request, response) => {
   const movieId = request.params.id;
   const queryString = `?pagination%5Blimit%5D=100&filters[movie]=${movieId}`;
   moviePage(response, cmsAdapter, queryString);
 });
 
 //The 404 Route (ALWAYS Keep this as the last route)
-app.get('*', async function (request, response) {
+app.get("*", async function (request, response) {
   response.status(404);
-  renderPage(response, '404');
+  renderPage(response, "404");
 });
-app.use(express.static('static'));
+app.use(express.static("static"));
 
 export default app;
