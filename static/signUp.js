@@ -49,29 +49,28 @@ function handleFormSubmission(event) {
     // Disable on successful sign-up — but don't disable pending valid input!
     signupButton.disabled = "true";
   }
+}
+//Eventlistener when user clicks submit button
+async function sendingForm(e) {
+  // Finding form through this id
+  const form = document.querySelector("form");
 
-  //Eventlistener when user clicks submit button
-  async function sendingForm(e) {
-    // Finding form through this id
-    const form = document.querySelector("form");
+  const fullName = document.querySelector("#name").value;
+  const email = document.querySelector("#email").value;
+  const password = document.querySelector("#password").value;
 
-    const fullName = document.querySelector("name");
-    const email = document.querySelector("email");
-    const password = document.querySelector("password");
+  const payload = new URLSearchParams();
+  payload.append("name:", fullName);
+  payload.append("email:", email);
+  payload.append("password:", password);
 
-    const payload = new URLSearchParams();
-    payload.append("username", fullName);
-    payload.append("email", email);
-    payload.append("password", password);
+  console.log([...payload]);
 
-    console.log([...payload]);
-
-    const response = await fetch("/signUp", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: payload,
-    });
-  }
+  const response = await fetch("/signUp", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: payload,
+  });
 }
