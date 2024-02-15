@@ -3,6 +3,10 @@ const passwordInput = document.getElementById("password");
 const signupButton = document.querySelector("button#sign-up");
 const togglePasswordButton = document.getElementById("toggle-password");
 
+let pass = document.getElementById("password");
+let msg = document.getElementById("message");
+let str = document.getElementById("strength");
+
 form.addEventListener("submit", handleFormSubmission);
 passwordInput.addEventListener("input", resetCustomValidity);
 togglePasswordButton.addEventListener("click", togglePassword);
@@ -50,6 +54,7 @@ function handleFormSubmission(event) {
     signupButton.disabled = "true";
   }
 }
+
 //Eventlistener when user clicks submit button
 async function sendingForm(e) {
   // Finding form through this id
@@ -73,4 +78,47 @@ async function sendingForm(e) {
     },
     body: payload,
   });
+}
+
+pass.addEventListener("input", () => {
+  if (pass.value.length > 0) {
+    msg.style.display = "block";
+  } else {
+    msg.style.display = "none";
+  }
+  if (pass.value.length < 4) {
+    str.innerHTML = "weak";
+    pass.style.borderColor = "#ff5925";
+    msg.style.color = "#ff5925";
+  } else if (pass.value.length >= 4 && pass.value.length < 8) {
+    str.innerHTML = "medium";
+    pass.style.borderColor = "orange";
+    msg.style.color = "orange";
+  } else if (pass.value.length >= 8) {
+    str.innerHTML = "strong";
+    pass.style.borderColor = "#26d730";
+    msg.style.color = "#26d730";
+  }
+});
+function storeInput() {
+  event.preventDefault();
+  const form = document.getElementById("form");
+  // Initialise an empty array
+  const inputArray = [];
+
+  // Get input elements
+  const inputFullname = document.getElementById("name");
+  const inputEmail = document.getElementById("email");
+  const inputPass = document.getElementById("password");
+
+  // Get values of the elements
+  const userName = inputFullname.value;
+  const userEmail = inputEmail.value;
+  const userPass = inputPass.value;
+
+  // Add values to array
+  inputArray.push(userName, userEmail, userPass);
+
+  //Print array to console
+  console.log(inputArray);
 }
