@@ -11,14 +11,14 @@
 
   <body>
     <main>
-      <form method="post">
+      <form id="form">
         <h1>Login</h1>
         <section>
-          <label for="email">Email</label>
+          <label for="username">Username</label>
           <input
-            id="email"
-            name="email"
-            type="email"
+            id="username"
+            name="username"
+            type="username"
             autocomplete="username"
             required
           />
@@ -36,7 +36,7 @@
           <input id="password" name="password" type="password" />
         </section>
 
-        <button id="log-in">Log in</button>
+        <button id="log-in" onclick="storeInput();">Log in</button>
       </form>
     </main>
   </body>

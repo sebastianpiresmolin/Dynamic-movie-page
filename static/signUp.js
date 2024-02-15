@@ -115,16 +115,18 @@ function storeInput() {
 
   // Get input elements
   const inputFullname = document.getElementById("name");
+  const inputUsername = document.getElementById("username");
   const inputEmail = document.getElementById("email");
   const inputPass = document.getElementById("password");
 
   // Get values of the elements
-  const userName = inputFullname.value;
+  const userName = inputUsername.value;
+  const fullName = inputFullname.value;
   const userEmail = inputEmail.value;
   const userPass = inputPass.value;
 
   // Add values to array
-  inputArray.push(userName, userEmail, userPass);
+  inputArray.push(fullName, userName, userEmail, userPass);
 
   //Print array to console
   console.log(inputArray);
