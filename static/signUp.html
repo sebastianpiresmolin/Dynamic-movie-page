@@ -34,7 +34,7 @@
 
   <body>
     <main>
-      <form method="post">
+      <form id="form">
         <h1>Sign up</h1>
 
         <section>
@@ -78,9 +78,10 @@
             required
           />
           <div id="password-constraints">Eight or more characters.</div>
+          <p id="message">Password is <span id="strength"></span></p>
         </section>
 
-        <button id="sign-up">Sign up</button>
+        <button id="sign-up" onclick="storeInput()">Sign up</button>
       </form>
     </main>
   </body>
