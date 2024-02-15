@@ -47,14 +47,16 @@ function handleFormSubmission(event) {
   if (form.checkValidity() === false) {
     // Handle invalid form
   } else {
+    /*
     sendingForm();
+*/
     // On a production site do form submission.
     alert("Signed up!");
     // Disable on successful sign-up — but don't disable pending valid input!
     signupButton.disabled = "true";
   }
-}
-
+} /*
+/*
 //Eventlistener when user clicks submit button
 async function sendingForm(e) {
   // Finding form through this id
@@ -79,7 +81,9 @@ async function sendingForm(e) {
     body: payload,
   });
 }
+*/
 
+//Password strength indicatior
 pass.addEventListener("input", () => {
   if (pass.value.length > 0) {
     msg.style.display = "block";
@@ -87,7 +91,10 @@ pass.addEventListener("input", () => {
     msg.style.display = "none";
   }
   if (pass.value.length < 4) {
+    //changes span strength to show weak
     str.innerHTML = "weak";
+    //changes password input box border to another color
+    // and message color to the same color as input box
     pass.style.borderColor = "#ff5925";
     msg.style.color = "#ff5925";
   } else if (pass.value.length >= 4 && pass.value.length < 8) {
@@ -100,9 +107,9 @@ pass.addEventListener("input", () => {
     msg.style.color = "#26d730";
   }
 });
+
+// Saving sign up data in an array to be used later on
 function storeInput() {
-  event.preventDefault();
-  const form = document.getElementById("form");
   // Initialise an empty array
   const inputArray = [];
 
