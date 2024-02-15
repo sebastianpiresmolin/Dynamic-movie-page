@@ -5,38 +5,58 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="/signup-login.css" />
+    <link href="./output.css" rel="stylesheet" />
     <script src="/login.js" defer></script>
   </head>
 
-  <body>
-    <main>
-      <form id="form">
-        <h1>Login</h1>
-        <section>
-          <label for="username">Username</label>
+  <body class="font-sans font-medium m-20 md:mx-15 lg:mx-70">
+    <main class="mx-auto max-w-500">
+      <form id="form" class="border-b border-gray-300 mb-20 pb-100 lg:pb-0">
+        <h1
+          class="text-2xl font-medium border-b border-gray-300 text-2xl font-light mb-50 px-5"
+        >
+          Login
+        </h1>
+
+        <section class="mb-25 relative">
+          <label for="username" class="block text-lg font-medium mb-3"
+            >Username</label
+          >
           <input
             id="username"
             name="username"
             type="username"
             autocomplete="username"
             required
+            class="border border-gray-300 text-lg px-12 w-90 sm:w-full focus:outline-none"
           />
         </section>
 
-        <section>
+        <section class="mb-25 relative">
           <label for="password">Password</label>
           <button
             id="toggle-password"
             type="button"
             aria-label="Show password as plain text. Warning: this will display your password on the screen."
+            class="text-base sm:text-lg lg:text-xl bg-none border-none cursor-pointer text-base sm:text-lg font-light p-0 absolute top-0 right-3"
           >
             Show password
           </button>
-          <input id="password" name="password" type="password" />
+          <input
+            id="password"
+            name="password"
+            type="password"
+            class="border border-gray-300 text-lg px-12 w-90 sm:w-full focus:outline-none"
+          />
         </section>
 
-        <button id="log-in" onclick="storeInput();">Log in</button>
+        <button
+          id="log-in"
+          onclick="storeInput();"
+          class="bg-black border-2 border-gray-300 rounded-md text-white cursor-pointer block text-base sm:text-lg font-medium my-3 px-6 py-3 text-gray-500 cursor-not-allowed hover:bg-gray-800 hover:text-white lg:text-xl"
+        >
+          Log in
+        </button>
       </form>
     </main>
   </body>
