@@ -204,7 +204,7 @@ app.post("/movies/:movieId/review", (request, response) => {
 });
 
 //--------------------------------------------------
-
+/*
 app.post("/signUp", (request, response) => {
   const name = request.body.username;
   const email = request.body.email;
@@ -243,7 +243,7 @@ app.post("/signUp", (request, response) => {
       response.status(500).send("Error writing to database");
     });
 });
-
+*/
 //----------------------------------------------------
 
 app.get("/", async (request, response) => {
