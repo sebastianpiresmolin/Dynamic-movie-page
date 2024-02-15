@@ -227,3 +227,11 @@ textarea {
     margin: 0 0 60px 0;
   }
 }
+
+#message {
+  position: absolute;
+  bottom: -30px;
+  color: black;
+  font-size: 15px;
+  display: none;
+}
