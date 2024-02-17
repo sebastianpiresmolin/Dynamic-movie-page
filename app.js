@@ -286,6 +286,12 @@ app.get('/movie/:id/screenings', async (request, response) => {
   moviePage(response, cmsAdapter, queryString);
 });
 
+app.get('/movies/:id/reviews/:page', async (req, res) => {
+  const reviews = await getFiveReviews();
+  res.json(reviews);
+});
+
+
 //The 404 Route (ALWAYS Keep this as the last route)
 app.get('*', async function (request, response) {
   response.status(404);

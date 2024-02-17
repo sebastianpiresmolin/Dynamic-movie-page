@@ -20,6 +20,28 @@
       <button type="submit"> Submit</button>
     </form>
   </div>
+  
+      <ul class="reviews ">
+   {{#each reviews}}
+      <li class="review">
+         <p class="reviewComment">{{comment}}</p>
+         <p class="reviewAuthor">{{author}}</p>
+         <span class="reviewRating">{{rating}}</span>
+      </li>
+   {{/each}}
+</ul>
+  <div class="page-number"></div>
+  <button class="reviews__prev">Previous</button>
+  <button class="reviews__next">Next</button>
+
+  <template class="reviewsTemplate">
+   <li class="reviews">
+      <p class="reviewComment">{{review}}</p>
+      <p class="reviewAuthor">{{reviewAuthor}}</p>
+      <span class="reviewRating">{{reviewRating}}</span>
+   </li>
+</template>
+
 </div>
 <h2>Kommande visningar</h2>
 <div id="screeningsContainer"></div>
