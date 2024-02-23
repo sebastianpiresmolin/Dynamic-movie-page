@@ -1,4 +1,7 @@
-<script type='module' src='/static/login.js' defer></script>
+<style>
+  .signupButton { --mdc-theme-primary: var(--primary-color); }
+</style>
+
 <div class='loginBox'>
   <h2 class='loginHeader'>Awesome Cinema</h2>
   <h3 class='loginSubheader'>Login or signup</h3>
@@ -10,9 +13,9 @@
       class='loginButton'
       id='loginButton'
     >Login</md-filled-button>
-    <md-filled-button
+    <md-outlined-button
       class='signupButton'
       id='signupButton'
-    >Signup</md-filled-button>
+    >Signup</md-outlined-button>
   </form>
 </div>

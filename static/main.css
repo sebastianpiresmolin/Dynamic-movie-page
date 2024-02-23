@@ -1,3 +1,12 @@
+:root {
+  --primary-color: #780000;
+  --secondary-color: #ba837b;
+  --tertiary-color: #ad8c3e;
+  --error-color: #ff5449;
+  --quinary-color: #998e8d;
+  --senary-color: rgb(75, 75, 75);
+}
+
 body,
 html {
   height: 100vh;
@@ -229,7 +238,7 @@ p.room {
   justify-content: center;
   align-content: center;
   flex-direction: column;
-  background-color: rgb(75, 75, 75);
+  background-color: var(--quinary-color);
   height: 500px;
   width: 400px;
   margin-bottom: 10vh;
@@ -240,7 +249,8 @@ p.room {
   display: flex;
   justify-content: center;
   align-items: center;
-  color: gold;
+  color: var(--primary-color);
+  text-shadow: white 0px 0px 40px;
   margin-top: 0;
   font-size: 32px;
 }
@@ -289,6 +299,10 @@ p.room {
 .signupButton {
   width: 300px;
   height: 40px;
+  --md-outlined-button-outline-color: var(--primary-color);
+  --md-outlined-button-label-text-color: var(--primary-color);
+  --md-outlined-button-container-border-radius: 1px;
+  --md-filled-button-container-color: var(--primary-color);
 }
 
 .loginButton {
