@@ -43,6 +43,7 @@ export const MENU = [
   { name: 'Movies', link: '/movies' },
   { name: 'About', link: '/about' },
   { name: 'Contact', link: '/contact' },
+  { name: 'Login', link: '/login' },
 ];
 
 // Images for index, about and contact page
