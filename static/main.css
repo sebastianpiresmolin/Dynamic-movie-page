@@ -116,6 +116,8 @@ footer li {
   flex-basis: 100%;
   justify-content: center;
   align-content: center;
+  align-items: center;
+  justify-items: center;
 }
 .main h1 {
   text-align: center;
@@ -215,5 +217,30 @@ p.date, p.room {
   padding: 0;
 }
 
-/*# sourceMappingURL=main.css.map */
+.loginBox {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  flex-direction: column;
+  background-color: black;
+  height: 50vw;
+  min-height: 400px;
+  width: 40vw;
+  min-width: 300px;
+  margin-bottom: 10vh;
+  border-radius: 10px;
+}
 
+.loginHeader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+
+.loginSubheader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}/*# sourceMappingURL=main.css.map */
