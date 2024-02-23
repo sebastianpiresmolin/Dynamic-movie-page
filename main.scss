@@ -7,6 +7,7 @@ html {
   overflow: x-hidden;
   display: flex;
   flex-direction: column;
+  font-family: 'Roboto', sans-serif;
 }
 
 nav {
@@ -128,7 +129,8 @@ footer {
   }
 }
 
-.allMovies, .screeningList {
+.allMovies,
+.screeningList {
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
@@ -189,7 +191,8 @@ footer {
   }
 }
 
-li.movies, li.screening {
+li.movies,
+li.screening {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -218,11 +221,11 @@ li.screening {
   color: white;
 }
 
-p.date, p.room {
+p.date,
+p.room {
   margin-bottom: 5px;
   margin-top: 0px;
   padding: 0;
-  
 }
 
 .loginBox {
@@ -230,25 +233,68 @@ p.date, p.room {
   justify-content: center;
   align-content: center;
   flex-direction: column;
-  background-color: black;
-  height: 50vw;
-  min-height: 400px;
-  width: 40vw;
-  min-width: 300px;
+  background-color: rgb(75, 75, 75);
+  height: 500px;
+  width: 400px;
   margin-bottom: 10vh;
-  border-radius: 10px;
+  border-radius: 5px;
 }
 
-.loginHeader{
+.loginHeader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: gold;
+  margin-top: 0;
+  font-size: 32px;
+}
+
+.loginSubheader {
   display: flex;
   justify-content: center;
   align-items: center;
   color: white;
 }
 
-.loginSubheader{
+.loginForm {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.usernameField,
+.passwordField {
+  width: 300px;
+  height: 40px;
+  padding: 10px;
+  border-radius: 5px;
+  outline: none;
+  &:focus {
+    border: 2px solid rgb(124, 5, 5);
+  }
+}
+
+.usernameField {
+  margin-bottom: 10px;
+}
+
+.forgot {
   color: white;
+  text-decoration: none;
+  &:hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+}
+
+.loginButton,
+.signupButton {
+ 
+  width: 300px;
+  height: 40px;
+}
+
+.loginButton {
+  margin-bottom: 10px;
 }

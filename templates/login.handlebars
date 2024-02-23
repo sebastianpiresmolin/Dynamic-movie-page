@@ -1,4 +1,18 @@
-<div class="loginBox">
-    <h2 class="loginHeader">Awesome Cinema</h2>
-    <h3 class="loginSubheader">Login or signup</h3>
+<script type='module' src='/static/login.js' defer></script>
+<div class='loginBox'>
+  <h2 class='loginHeader'>Awesome Cinema</h2>
+  <h3 class='loginSubheader'>Login or signup</h3>
+  <form class='loginForm'>
+    <input type='text' class='usernameField' placeholder='Email' />
+    <input type='password' class='passwordField' placeholder='Password' />
+    <p class='forgot'>Forgot your password?</p>
+    <md-filled-button
+      class='loginButton'
+      id='loginButton'
+    >Login</md-filled-button>
+    <md-filled-button
+      class='signupButton'
+      id='signupButton'
+    >Signup</md-filled-button>
+  </form>
 </div>
