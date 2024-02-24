@@ -1,1 +1,5 @@
-import '@material/web/button/filled-button.js';
+const signupButton = document.getElementById('signupButton');
+
+signupButton.addEventListener('click', () => {
+  window.location.href = './signup';
+});

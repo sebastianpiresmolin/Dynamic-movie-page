@@ -241,8 +241,10 @@ p.room {
   display: flex;
   justify-content: center;
   align-content: center;
+  justify-items: center;
+  align-items: center;
   flex-direction: column;
-  background-color: var(--quinary-color);
+  background-color: rgba(0, 0, 0, 0.2);
   height: 500px;
   width: 400px;
   margin-bottom: 10vh;
@@ -254,7 +256,7 @@ p.room {
   justify-content: center;
   align-items: center;
   color: var(--primary-color);
-  text-shadow: white 0px 0px 40px;
+  text-shadow: white 0px 0px 20px;
   margin-top: 0;
   font-size: 32px;
 }
@@ -264,6 +266,7 @@ p.room {
   justify-content: center;
   align-items: center;
   color: white;
+  text-shadow: black 0px 0px 30px;
 }
 
 .loginForm {
@@ -291,6 +294,7 @@ p.room {
 
 .forgot {
   color: white;
+  text-shadow: black 0px 0px 30px;
   text-decoration: none;
   &:hover {
     cursor: pointer;
@@ -310,4 +314,35 @@ p.room {
 
 .loginButton {
   margin-bottom: 10px;
+}
+
+.signupForm {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0;
+  --md-outlined-text-field-focus-outline-color: var(--primary-color);
+  --md-outlined-text-field-focus-label-text-color: black;
+}
+
+.signupBox {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: center;
+  justify-items: center;
+  align-items: center;
+  flex-direction: row;
+  outline-style: solid;
+  height: 200px;
+  width: 500px;
+  border-radius: 5px;
+  margin-top: 20px;
+}
+
+.signupHeader {
+  margin-top: 0;
 }

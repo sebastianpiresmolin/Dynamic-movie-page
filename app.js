@@ -221,6 +221,14 @@ app.get('/login', async (request, response) => {
   renderPage(response, 'login');
 });
 
+// API route for signup page
+
+app.get('/signup', async (request, response) => {
+  renderPage(response,'signup');
+});
+
+// API route for logout page
+
 // API route for all movies page
 app.get('/movies', async (request, response) => {
   renderPage(response, 'movies', true);
