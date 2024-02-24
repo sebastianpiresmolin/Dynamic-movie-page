@@ -322,6 +322,8 @@ p.room {
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
+  outline-style: solid;
+  padding: 20px;
   gap: 10px;
   margin: 0;
   --md-outlined-text-field-focus-outline-color: var(--primary-color);
@@ -336,8 +338,7 @@ p.room {
   justify-items: center;
   align-items: center;
   flex-direction: row;
-  outline-style: solid;
-  height: 200px;
+  height: fit-content;
   width: 500px;
   border-radius: 5px;
   margin-top: 20px;
@@ -345,4 +346,30 @@ p.room {
 
 .signupHeader {
   margin-top: 0;
+}
+
+.passwordCircles {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  font-size: 22px;
+}
+
+.passwordStrength {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  margin-left: 40px;
+}
+
+.strengthP {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+#signupPassword{
+  margin-left: -40px;
 }

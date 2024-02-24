@@ -32,19 +32,24 @@
     >
     </md-outlined-text-field>
     <md-outlined-text-field
+      id='signupPassword'
       type='password'
       name='password'
       label='Password'
       value=''
     >
     </md-outlined-text-field>
-    <md-outlined-text-field
-      type='password'
-      name='repeatPassword'
-      label='Repeat Password'
-      value=''
-    >
-    </md-outlined-text-field>
+
+    <div class='passwordStrength'>
+      <p class='strengthP'>Password Strength</p>
+      <div class='passwordCircles'><div id='emptyCircleOne'><i
+            class='fa-regular fa-circle'
+          ></i></div><div id='emptyCircleTwo'><i
+            class='fa-regular fa-circle'
+          ></i></div><div id='emptyCircleThree'><i
+            class='fa-regular fa-circle'
+          ></i></div></div>
+    </div>
     <md-filled-button
       class='signupButton'
       id='signupPageButton'
