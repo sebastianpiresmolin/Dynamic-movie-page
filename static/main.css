@@ -370,4 +370,16 @@ p.room {
 
 #signupPassword {
   margin-left: -40px;
+}
+
+#loginError {
+  color: var(--error-color);
+  text-shadow: white 0px 0px 30px;
+  text-align: center;
+  margin-top: 10px;
+  display: none;
+}
+
+#logoutButton {
+  display: none;
 }/*# sourceMappingURL=main.css.map */

@@ -2,12 +2,14 @@
   Sign up for Awesome Cinema
 </h2>
 <div class='signupBox'>
-  <form class='signupForm'>
+  <form class='signupForm' id='signupForm'>
     <md-outlined-text-field
       type='text'
       name='firstName'
       label='First Name'
       value=''
+      id='firstName'
+      required
     >
     </md-outlined-text-field>
     <md-outlined-text-field
@@ -15,13 +17,17 @@
       name='lastName'
       label='Last Name'
       value=''
+      id='lastName'
+      required
     >
     </md-outlined-text-field>
     <md-outlined-text-field
-      type='number'
+      type='tel'
       name='phone'
       label='Phone Number'
       value=''
+      id='phone'
+      required
     >
     </md-outlined-text-field>
     <md-outlined-text-field
@@ -29,6 +35,8 @@
       name='email'
       label='Email Address'
       value=''
+      id='email'
+      required
     >
     </md-outlined-text-field>
     <md-outlined-text-field
@@ -37,6 +45,7 @@
       name='password'
       label='Password'
       value=''
+      required
     >
     </md-outlined-text-field>
 

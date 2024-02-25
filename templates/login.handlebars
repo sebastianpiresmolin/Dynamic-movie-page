@@ -1,19 +1,18 @@
-
-
-
-
 <div class='loginBox'>
   <h2 class='loginHeader'>Awesome Cinema</h2>
   <h3 class='loginSubheader'>Login or signup</h3>
-  <form class='loginForm'>
-    <input type='email' class='usernameField' placeholder='Email' />
-    <input type='password' class='passwordField' placeholder='Password' />
+  <form class='loginForm' id="loginForm">
+    <input type='email' class='usernameField' placeholder='Email' id="usernameLogin" />
+    <input type='password' class='passwordField' placeholder='Password' id="passwordLogin"/>
     <p class='forgot'>Forgot your password?</p>
+    <p id="loginError">Wrong password or user not found</p>
     <md-filled-button
+      type='submit'
       class='loginButton mdc-theme--primary-bg'
       id='loginButton'
     >Login</md-filled-button>
   </form>
+  
   <md-outlined-button
     class='signupButton'
     id='signupButton'
