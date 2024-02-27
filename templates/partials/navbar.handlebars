@@ -1,9 +1,9 @@
-<nav>
-        <ul class="menuItems">
-          {{#each menuItems}}
-            <li class="menuItem {{#if this.active}}active{{else}}inactive{{/if}}">
-              <a href="{{this.link}}">{{this.name}}</a>
-            </li>
-          {{/each}}
-        </ul>
-      </nav>
+<nav role="navigation">
+  <ul class="menuItems" role="menu">
+    {{#each menuItems}}
+      <li class="menuItem {{#if this.active}}active{{else}}inactive{{/if}}" role="none">
+        <a href="{{this.link}}" role="menuitem" aria-current="{{this.active}}">{{this.name}}</a>
+      </li>
+    {{/each}}
+  </ul>
+</nav>

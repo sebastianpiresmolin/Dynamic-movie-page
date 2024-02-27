@@ -1,9 +1,9 @@
 <h1>All movies currently being shown! .. I think.</h1>
-<ul class='allMovies'>
+<ul class='allMovies' role="list">
   {{#each movieIDs}}
-    <li class='movies'>
+    <li class='movies' role="listitem">
       <a href='/movie/{{this.id}}'>
-        <img src='{{this.image}}' alt='{{this.title}}' />
+        <img src='{{this.image}}' alt='Movie {{this.title}}' />
         <h2>{{this.title}}</h2>
       </a>
     </li>

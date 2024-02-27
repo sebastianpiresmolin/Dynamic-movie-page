@@ -1,6 +1,12 @@
 <div class="movieById">
   <h2>{{movie.title}}</h2>
-  <img src="{{movie.image}}" alt="{{movie.title}}" />
+  <img
+    src="{{movie.image}}"
+    alt="{{movie.title}}"
+    tabindex="0"
+    role="img"
+    aria-label="{{movie.title}}"
+  />
   <md-block>{{movie.intro}}</md-block>
   {{#if movie.averageRating}}
     <p>Average Rating: {{movie.averageRating}}</p>
@@ -12,37 +18,54 @@
 
   <div>
     <h3>Leave a review on this movie </h3>
-    <form id="reviewForm" >
-      <input id="movieTitle" type="hidden" name="movieTitle" value="{{ movie.title }}">
+    <form id="reviewForm" role="form">
+      <input
+        id="movieTitle"
+        type="hidden"
+        name="movieTitle"
+        value="{{movie.title}}"
+      />
       <input id="name" name="name" type="text" placeholder="Name" />
-      <input id="comment" name="comment" type="text" placeholder="Leave comment" />
-      <input id="rating" name="rating" type="text" placeholder="Give rating 1-5" />
+      <input
+        id="comment"
+        name="comment"
+        type="text"
+        placeholder="Leave comment"
+      />
+      <input
+        id="rating"
+        name="rating"
+        type="text"
+        placeholder="Give rating 1-5"
+      />
       <button type="submit"> Submit</button>
     </form>
   </div>
-  
-      <ul class="reviews ">
-   {{#each reviews}}
-      <li class="review">
-         <p class="reviewComment">{{comment}}</p>
-         <p class="reviewAuthor">{{author}}</p>
-         <span class="reviewRating">{{rating}}</span>
+
+  <div class="reviews" role="region" aria-live="polite">
+    <ul class="reviewsList">
+      {{#each reviews}}
+        <li class="review">
+          <p class="reviewComment">{{comment}}</p>
+          <p class="reviewAuthor">{{author}}</p>
+          <span class="reviewRating">{{rating}}</span>
+        </li>
+      {{/each}}
+    </ul>
+    <div class="page-number"></div>
+    <button class="reviews__prev" role="button">Previous</button>
+    <button class="reviews__next" role="button">Next</button>
+
+    <template class="reviewsTemplate">
+      <li class="reviews">
+        <p class="reviewComment">{{review}}</p>
+        <p class="reviewAuthor">{{reviewAuthor}}</p>
+        <span class="reviewRating">{{reviewRating}}</span>
       </li>
-   {{/each}}
-</ul>
-  <div class="page-number"></div>
-  <button class="reviews__prev">Previous</button>
-  <button class="reviews__next">Next</button>
-
-  <template class="reviewsTemplate">
-   <li class="reviews">
-      <p class="reviewComment">{{review}}</p>
-      <p class="reviewAuthor">{{reviewAuthor}}</p>
-      <span class="reviewRating">{{reviewRating}}</span>
-   </li>
-</template>
-
+    </template>
+  </div>
 </div>
+
 <h2>Kommande visningar</h2>
 <div id="screeningsContainer"></div>
-<script type='module' src='/form.js' defer></script> 
+<script type="module" src="/form.js" defer></script>

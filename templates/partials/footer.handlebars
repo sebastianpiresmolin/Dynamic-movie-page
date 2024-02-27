@@ -1,7 +1,8 @@
-<ul class='footerItems'>
+<ul class='footerItems' role="menu">
   {{#each menuItems}}
-    <li class='footerItem {{#if this.active}}active{{else}}inactive{{/if}}'>
-      <a href='{{this.link}}'>{{this.name}}</a>
+    <li class='footerItem {{#if this.active}}active{{else}}inactive{{/if}}' role="none">
+      <a href='{{this.link}}' role="menuitem" aria-current="{{this.active}}">{{this.name}}</a>
     </li>
   {{/each}}
 </ul>
+
